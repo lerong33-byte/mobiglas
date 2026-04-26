@@ -393,13 +393,14 @@ option,optgroup{background:var(--bg2)}
     <div class="nav-logo">MOBIGLAS</div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
-      <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" autocomplete="off"/>
+      <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" autocomplete="off"/>
+      <span id="sSearchClear" onclick="clearShipSearch()" style="cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:2px 4px;display:none;user-select:none" title="Clear">&#10005;</span>
       <div id="srbox"></div>
     </div>
-    <div class="nav-divider"></div>
-    <div class="nav-ship">
+    <div class="nav-divider" style="display:none"></div>
+    <div class="nav-ship" style="display:none">
       <span id="stag" style="display:none"></span>
-      <select id="sSel" onchange="onSel(this.value)" class="ship-dd">
+      <select id="sSel" onchange="onSel(this.value)" class="ship-dd" style="display:none">
         <option value="">— Select ship —</option>
       </select>
     </div>
@@ -2079,38 +2080,70 @@ function onActChange(val){selAct=val;if(selShip)generate();}
 })();
 
 // ═══ SEARCH & SELECT ═══
-function onSearch(){
-  var q=document.getElementById('sSearch').value.trim().toLowerCase();
-  var sb=document.getElementById('srbox');
-  if(!q){if(sb)sb.style.display='none';return;}
-  var res=[];
-  Object.keys(SHIPS).forEach(function(mfr){
-    SHIPS[mfr].forEach(function(s){if(s.toLowerCase().includes(q))res.push({mfr:mfr,name:s});});
+function buildSrbox(q) {
+  var sb = document.getElementById('srbox');
+  if (!sb) return;
+  var res = [];
+  Object.keys(SHIPS).sort().forEach(function(mfr) {
+    if (!SHIPS[mfr]) return;
+    SHIPS[mfr].forEach(function(s) {
+      if (!q || s.toLowerCase().includes(q) || mfr.toLowerCase().includes(q)) {
+        res.push({mfr:mfr, name:s});
+      }
+    });
   });
-  if(!sb)return;
-  if(res.length===0){
-    sb.innerHTML='<div style="padding:8px 12px;font-size:13px;color:var(--muted)">No ships found</div>';
+  if (res.length === 0) {
+    sb.innerHTML = '<div style="padding:8px 12px;font-size:12px;color:var(--t3)">No ships found</div>';
   } else {
-    sb.innerHTML=res.slice(0,20).map(function(r){
-      return '<div class="sri'+(r.name===selShip?' on':'')+'" data-n="'+encodeURIComponent(r.name)+'"><span class="sri-m">'+r.mfr+'</span>'+r.name+'</div>';
-    }).join('');
-    Array.prototype.forEach.call(sb.querySelectorAll('.sri'),function(el){
-      el.onclick=function(){pick(decodeURIComponent(this.getAttribute('data-n')));};
+    // Group by manufacturer
+    var byMfr = {};
+    res.forEach(function(r) { if(!byMfr[r.mfr])byMfr[r.mfr]=[]; byMfr[r.mfr].push(r.name); });
+    var html = '';
+    Object.keys(byMfr).sort().forEach(function(mfr) {
+      html += '<div style="padding:4px 12px 2px;font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);background:var(--bg3);border-bottom:1px solid var(--border)">' + mfr + '</div>';
+      html += byMfr[mfr].map(function(s) {
+        return '<div class="sri' + (s===selShip?' on':'') + '" data-n="' + encodeURIComponent(s) + '">' + s + '</div>';
+      }).join('');
+    });
+    sb.innerHTML = html;
+    Array.prototype.forEach.call(sb.querySelectorAll('.sri'), function(el) {
+      el.onclick = function() {
+        pick(decodeURIComponent(this.getAttribute('data-n')));
+        document.getElementById('sSearch').value = decodeURIComponent(this.getAttribute('data-n'));
+        sb.style.display = 'none';
+      };
     });
   }
-  sb.style.display='block';
+  sb.style.display = 'block';
+}
+
+function onSearch(){
+  var q = document.getElementById('sSearch').value.trim().toLowerCase();
+  var clr = document.getElementById('sSearchClear');
+  if (clr) clr.style.display = document.getElementById('sSearch').value ? 'block' : 'none';
+  buildSrbox(q);
+}
+
+function clearShipSearch() {
+  var si = document.getElementById('sSearch');
+  var clr = document.getElementById('sSearchClear');
+  if (si) si.value = '';
+  if (clr) clr.style.display = 'none';
+  // Show all ships immediately after clearing
+  buildSrbox('');
+  si && si.focus();
 }
 function pick(n){
   if(!n)return;
   selShip=n;
   if(userPwrAdj)delete userPwrAdj[n];
-  var si=document.getElementById('sSearch');if(si){si.value='';if(si.blur)si.blur();}
+  var si=document.getElementById('sSearch');if(si){si.value=n;if(si.blur)si.blur();}var _clr=document.getElementById('sSearchClear');if(_clr)_clr.style.display='block';
   var sb=document.getElementById('srbox');if(sb)sb.style.display='none';
   var ss=document.getElementById('sSel');if(ss){ss.value=n;}
   setTag(n);generate();updatePower();if(_currentTarget)loadTargetImage(_currentTarget);var _flp=fetchLiveShipData(n);if(_flp&&_flp.then)_flp.then(function(){updatePower();if(_currentTarget)loadTargetImage(_currentTarget);});
 }
 window.pickShip=pick;
-function onSel(v){if(!v){showDashboard();return;}selShip=v;if(userPwrAdj)delete userPwrAdj[v];setTag(v);generate();if(_currentTarget)loadTargetImage(_currentTarget);fetchLiveShipData(v).then(function(){updatePower();if(_currentTarget)loadTargetImage(_currentTarget);});}
+function onSel(v){if(!v){var si=document.getElementById('sSearch');if(si)si.value='';showDashboard();return;}selShip=v;if(userPwrAdj)delete userPwrAdj[v];setTag(v);generate();if(_currentTarget)loadTargetImage(_currentTarget);fetchLiveShipData(v).then(function(){updatePower();if(_currentTarget)loadTargetImage(_currentTarget);});}
 function setTag(n){
   var _phEl=document.getElementById('shipPh');
   if(_phEl&&n)_phEl.style.display='none';
@@ -2460,15 +2493,17 @@ function updatePower() {
     if (cached2[selShip]) { showMain(cached2[selShip]); }
     else {
       var _wu='https://starcitizen.tools/api.php?action=query&titles='+encodeURIComponent(title2)+'&prop=pageimages&format=json&pithumbsize=800&pilimit=1&origin=*';
+      console.log('[IMG] fetching for', selShip, title2);
       fetch(_wu)
         .then(function(r){return r.json();})
         .then(function(d){
-          var pages=d.query&&d.query.pages; if(!pages)return;
+          var pages=d.query&&d.query.pages; if(!pages){console.log('[IMG] no pages');return;}
           var p=pages[Object.keys(pages)[0]];
           var src=p&&p.thumbnail&&p.thumbnail.source;
+          console.log('[IMG] src:', src);
           if(src){cached2[selShip]=src;showMain(src);}
           else{if(phEl){phEl.style.display='';phEl.textContent=selShip;}}
-        }).catch(function(){if(phEl){phEl.style.display='';phEl.textContent=selShip;}});
+        }).catch(function(e){console.log('[IMG] error:', e.message);if(phEl){phEl.style.display='';phEl.textContent=selShip;}});
     }
   } else if (imgEl) {
     imgEl.style.display = 'none';
@@ -3901,18 +3936,25 @@ function updateTargetAnalysis(forceName) {
   // Update verdict wrap (above target panel)
   var vw = document.getElementById('verdictWrap');
   if (vw) {
-    var myTTK = parseFloat(totalTTK);
-    var theirTTK = parseFloat(inTotalTTK || '');
-    if (!isNaN(myTTK) && !isNaN(theirTTK)) {
-      var iWin = myTTK < theirTTK, tie = myTTK === theirTTK;
-      var adv = tie ? 0 : Math.round(Math.abs(theirTTK - myTTK)*10)/10;
+    var myTTK = parseFloat((totalTTK||'').toString().replace('s',''));
+    var theirTTK = parseFloat((inTotalTTK||'').toString().replace('s',''));
+    if (!isNaN(myTTK) && myTTK > 0 && !isNaN(theirTTK) && theirTTK > 0) {
+      var iWin = myTTK < theirTTK, tie = Math.abs(myTTK-theirTTK) < 0.1;
+      var adv = tie ? 0 : Math.round(Math.abs(theirTTK-myTTK)*10)/10;
       var vc = iWin?'var(--green)':tie?'var(--warn)':'var(--red)';
       var vi = iWin?'&#9650;':tie?'&#9670;':'&#9660;';
       var vt = iWin?'YOU WIN':tie?'EVEN MATCH':'YOU LOSE';
       var vs = tie?'Equal TTK':(iWin?'Kill '+adv+'s faster':'Die '+adv+'s sooner');
-      vw.style.display = 'flex';
-      vw.innerHTML = '<span style="font-size:12px;font-weight:700;font-family:var(--fmono);color:'+vc+'">'+vi+' '+vt+'</span>'
-        +'<span style="font-size:10px;color:var(--t3);font-family:var(--fmono);margin-left:6px">'+vs+'</span>';
+      vw.style.display = 'block';
+      vw.innerHTML = '<div style="background:'+(iWin?'rgba(34,197,94,.1)':tie?'rgba(234,179,8,.1)':'rgba(239,68,68,.1)')+';border:2px solid '+vc+';border-radius:var(--r);padding:8px;display:flex;align-items:center;justify-content:space-between">'
+        +'<div style="font-size:14px;font-weight:700;font-family:var(--fmono);color:'+vc+'">'+vi+' '+vt+'</div>'
+        +'<div style="font-size:10px;color:var(--t3);font-family:var(--fmono)">'+vs+'</div>'
+        +'</div>';
+    } else if (!isNaN(myTTK) && myTTK > 0) {
+      vw.style.display = 'block';
+      vw.innerHTML = '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px;text-align:center">'
+        +'<div style="font-size:11px;color:var(--t3);font-family:var(--fmono)">Kill in <span style="color:var(--green);font-weight:700">'+totalTTK+'</span></div>'
+        +'</div>';
     } else {
       vw.style.display = 'none';
     }
