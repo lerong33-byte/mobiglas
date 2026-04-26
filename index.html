@@ -393,7 +393,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.7</span></div>
+    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.8</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -4385,7 +4385,7 @@ function renderSavedList() {
   var cnt = document.getElementById('svCount');
   var arr = getSavedLoadouts();
   var section = document.getElementById('svSection');
-  if (section) section.style.display = arr.length ? 'block' : 'none';
+  if (section) section.style.display = (arr.length && selShip) ? 'block' : 'none';
   if (cnt) cnt.textContent = arr.length ? arr.length+' builds' : '';
   if (!arr.length) { el.innerHTML = '<div class="sv-empty">No saved loadouts yet</div>'; return; }
   el.innerHTML = arr.map(function(lo) {
