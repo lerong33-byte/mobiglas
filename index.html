@@ -441,7 +441,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.43</span></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.46</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -469,7 +469,7 @@ option,optgroup{background:var(--bg2)}
   <div class="body">
 
     <!-- LEFT: ship dashboard -->
-                <aside class="lp">
+                    <aside class="lp">
 <div class="ship-img-wrap" style="height:155px">
         <span class="ship-img-placeholder" id="shipPh">Select a ship</span>
         <img id="rpShipImg" alt=""/>
@@ -494,6 +494,8 @@ option,optgroup{background:var(--bg2)}
         </div>
       </div>
       <div class="lp-scroll">
+
+
         <div class="lp-card" id="pwrCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">POWER</span>
@@ -504,7 +506,14 @@ option,optgroup{background:var(--bg2)}
               <span class="pwr-eu-unit"> EU</span>
             </div>
           </div>
-        <div id="navModeBanner">&#9888; Weapons offline &middot; Shields collapsed</div>
+          <div class="con-row">
+            <span class="con-lbl">CONSUMPTION</span>
+            <div class="con-bar-wrap"><div id="conBar"></div></div>
+            <span id="pwrPct" style="font-size:10px;font-family:var(--fmono);min-width:32px;text-align:right;flex-shrink:0"></span>
+          </div>
+          <div class="spv-icons" id="spvIcons" style="display:none"></div>
+          <div class="spv-chart" id="spvChart"></div>
+          <div id="navModeBanner">&#9888; Weapons offline &middot; Shields collapsed</div>
           <button class="spv-reset-btn" onclick="resetPwrAdj()">&#8635; RESET POWER</button>
           <div class="spv-modes">
             <button class="spv-mode-btn on" id="mSCM" onclick="setMode('SCM')">SCM MODE</button>
@@ -514,13 +523,45 @@ option,optgroup{background:var(--bg2)}
             <span class="speed-lbl">SPEED</span>
             <span id="modeSpeed">&#8212;</span>
           </div>
-        
-<div class="lp-card" id="sigCard" style="display:none">
-          <div class="lp-card-hd"><span class="lp-card-title">SIGNATURES</span></div>
+        </div>
+
         <div class="lp-card" id="sigCard" style="display:none">
           <div class="lp-card-hd"><span class="lp-card-title">SIGNATURES</span></div>
+          <div class="sig-row"><span class="sig-lbl">IR</span><span class="sig-val" id="sigIR" style="color:var(--warn)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">EM idle</span><span class="sig-val" id="sigEM" style="color:var(--accent)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">EM max</span><span class="sig-val" id="sigEMmax" style="color:var(--red)">&#8212;</span></div>
+        </div>
+
         <div class="dps-block" id="dpsCard" style="display:none">
           <div class="dps-block-hd">FIREPOWER</div>
+          <div class="dps-nums">
+            <div class="dps-cell">
+              <div class="dps-lbl">TOTAL DPS</div>
+              <div class="dps-val" id="totalDPS" style="color:var(--warn)">&#8212;</div>
+            </div>
+            <div class="dps-cell">
+              <div class="dps-lbl">ALPHA</div>
+              <div class="dps-val" id="totalAlpha" style="color:var(--red)">&#8212;</div>
+            </div>
+          </div>
+          <div id="dpsBarsWrap" style="display:none">
+            <div class="dps-bar-hd">BY WEAPON</div>
+            <div id="dpsBars"></div>
+          </div>
+          <div id="shieldSection" style="display:none">
+            <div class="sig-row"><span class="sig-lbl">Shield HP</span><span class="sig-val" id="shpTotal" style="color:var(--green)">&#8212;</span></div>
+            <div class="sig-row"><span class="sig-lbl">Regen/s</span><span class="sig-val" id="shpRegen" style="color:var(--cyan)">&#8212;</span></div>
+            <div class="sig-row"><span class="sig-lbl">Face HP</span><span class="sig-val" id="shpFace">&#8212;</span></div>
+          </div>
+          <div id="maxRange" style="display:none">
+            <div class="sig-row"><span class="sig-lbl">QD Range</span><span class="sig-val" id="qdRange" style="color:var(--accent)">&#8212;</span></div>
+            <div class="sig-row"><span class="sig-lbl">Spool</span><span class="sig-val" id="qdSpool">&#8212;</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      
         <div class="lp-card" id="liveStatsCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">FLIGHT</span>
@@ -549,6 +590,7 @@ option,optgroup{background:var(--bg2)}
 
     </aside
       </div>
+    
     
     </aside>
 
@@ -661,29 +703,30 @@ option,optgroup{background:var(--bg2)}
 
     
 
-    <aside class="rp">
+        <aside class="rp">
       <div class="rp-scroll">
-<div style="border-top:1px solid var(--border);padding:8px 10px;flex-shrink:0">
-        <div style="font-size:9px;letter-spacing:1.5px;color:var(--accent);font-family:var(--fmono);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:6px">⊕ TARGET SHIP</div>
+        <div style="font-size:9px;letter-spacing:1.5px;color:var(--accent);font-family:var(--fmono);margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border)">⊕ TARGET SHIP</div>
         <div style="position:relative;display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 8px;gap:6px;margin-bottom:4px">
-            <span style="color:var(--t3);font-size:12px">&#9906;</span>
-            <input id="tgtSearch" type="text" placeholder="Search target…" autocomplete="off"
-              oninput="onTgtSearch(this.value)"
-              onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
-              onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"
-              style="flex:1;background:none;border:none;outline:none;font-size:11px;color:var(--text);padding:5px 0;font-family:var(--fhud)"/>
-            <span id="tgtSearchClear" onclick="clearTgtSearch()" style="display:none;cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none" title="Clear">&#10005;</span>
-            <div id="tgtDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:200;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.5)"></div>
-          </div>
-          
+          <span style="color:var(--t3);font-size:12px">&#9906;</span>
+          <input id="tgtSearch" type="text" placeholder="Search target…" autocomplete="off"
+            oninput="onTgtSearch(this.value)"
+            onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
+            onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"
+            style="flex:1;background:none;border:none;outline:none;font-size:11px;color:var(--text);padding:5px 0;font-family:var(--fhud)"/>
+          <span id="tgtSearchClear" onclick="clearTgtSearch()" style="display:none;cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none" title="Clear">&#10005;</span>
+          <div id="tgtDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:200;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.5)"></div>
+        </div>
+        <select id="tgtSel" class="tgt-sel-dd" style="display:none"><option value="">— Select target —</option></select>
+        <div id="tgtSelected" style="display:none!important">
+          <span id="tgtSelectedName"></span>
+          <button onclick="clearTarget()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:15px;padding:0;line-height:1">&#215;</button>
+        </div>
         <div id="tgtImgWrap" style="position:relative;height:140px;background:var(--bg3);border-radius:var(--r);overflow:hidden;margin-bottom:6px;border:1px solid var(--border)">
           <img id="tgtImg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:none" alt=""/>
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:12px;font-family:var(--fmono)" id="tgtImgPh">Select a target</div>
           <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:11px;font-family:var(--fmono);color:#fff;letter-spacing:.5px" id="tgtImgLabel"></div>
         </div>
-
-        
-        <div id="verdictWrap" style="display:none;margin-top:6px"></div>
+        <div id="verdictWrap" style="display:none;margin-bottom:6px"></div>
         <div class="tgt-panel-inner" id="tgtPanel">
           <div class="tgt-title">TARGET ANALYSIS</div>
           <div id="tgtContent" style="font-size:11px">
