@@ -3834,6 +3834,8 @@ function loadTargetImage(shipName) {
   var ph   = document.getElementById('tgtImgPh');
   if (!img) return;
   if (!shipName) {
+    // Only hide if _currentTarget is truly empty (i.e. user cleared it)
+    if (_currentTarget) { loadTargetImage(_currentTarget); return; }
     if (wrap) wrap.style.display = 'none';
     img.style.display = 'none';
     if (ph) ph.style.display = 'flex';
@@ -3893,7 +3895,13 @@ function selectTarget(name) {
 
 function clearTarget() {
   _currentTarget = '';
-  loadTargetImage('');
+  // Force hide - bypass the guard
+  var wrap = document.getElementById('tgtImgWrap');
+  var img = document.getElementById('tgtImg');
+  var ph = document.getElementById('tgtImgPh');
+  if (wrap) wrap.style.display = 'none';
+  if (img) img.style.display = 'none';
+  if (ph) { ph.style.display = 'flex'; ph.textContent = 'Select a target'; }
   var _ts=document.getElementById('tgtSel');if(_ts)_ts.value='';
   var inp = document.getElementById('tgtSearch'); if (inp) inp.value = '';
   var dd = document.getElementById('tgtDropdown'); if (dd) dd.style.display = 'none';
