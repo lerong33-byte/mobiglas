@@ -403,7 +403,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.18</span></div>
+    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.20</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -647,8 +647,7 @@ option,optgroup{background:var(--bg2)}
 
     <aside class="rp">
       <div class="rp-scroll">
-        <div style="font-size:9px;letter-spacing:1.5px;color:var(--accent);font-family:var(--fmono);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">⊕ TARGET SHIP</div>
-        <div style="border-top:1px solid var(--border);padding:8px 10px;flex-shrink:0">
+<div style="border-top:1px solid var(--border);padding:8px 10px;flex-shrink:0">
         <div style="font-size:9px;letter-spacing:1.5px;color:var(--accent);font-family:var(--fmono);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:6px">⊕ TARGET SHIP</div>
         <div style="position:relative;display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 8px;gap:6px;margin-bottom:4px">
             <span style="color:var(--t3);font-size:12px">&#9906;</span>
@@ -2469,6 +2468,19 @@ function generate(){
   document.getElementById('loContent').scrollTop=0;
   updatePower();
 }
+
+// ═══ GENERATE WRAPPER ═══
+var _origGenerate = generate;
+generate = function() {
+  hideDashboard();
+  _origGenerate.apply(this, arguments);
+  var loTab=document.querySelector('[data-t="lo"]');
+  if(loTab){loTab.style.background='var(--accent-bg)';setTimeout(function(){loTab.style.background='';},300);}
+  updateTargetAnalysis();
+  renderSavedList();
+  if (_currentTarget) loadTargetImage(_currentTarget);
+  setTimeout(loadWeaponImages, 100);
+};
 
 function getCompStatHTML(key,val){
   var db=COMP_DB[key]&&COMP_DB[key][val];
