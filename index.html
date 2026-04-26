@@ -398,12 +398,50 @@ option,optgroup{background:var(--bg2)}
 .body{user-select:none}
 .body.resizing{cursor:col-resize}
 
+
+/* ── MobiGlas holographic background ── */
+.cp{position:relative;}
+.cp::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    linear-gradient(rgba(122,176,232,.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,176,232,.09) 1px, transparent 1px),
+    linear-gradient(rgba(122,176,232,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,176,232,.04) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -1px -1px;
+}
+.cp::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(122,176,232,.10) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(80,200,224,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 70%, rgba(144,128,216,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 20% at 90% 10%, rgba(56,210,130,.04) 0%, transparent 50%);
+}
+.tabs,.pane{position:relative;z-index:1;}
+/* Corner bracket decorations on loContent */
+#loContent::before,#loContent::after{
+  content:'';position:absolute;width:20px;height:20px;pointer-events:none;z-index:2;opacity:.4;
+}
+#loContent::before{top:8px;left:8px;border-top:1px solid var(--accent);border-left:1px solid var(--accent);}
+#loContent::after{bottom:8px;right:8px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent);}
+#loContent{position:relative;}
+
 </style>
 
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.28</span></div>
+    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.31</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
