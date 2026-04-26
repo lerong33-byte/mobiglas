@@ -441,7 +441,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.38</span></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.43</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -469,7 +469,7 @@ option,optgroup{background:var(--bg2)}
   <div class="body">
 
     <!-- LEFT: ship dashboard -->
-            <aside class="lp">
+                <aside class="lp">
 <div class="ship-img-wrap" style="height:155px">
         <span class="ship-img-placeholder" id="shipPh">Select a ship</span>
         <img id="rpShipImg" alt=""/>
@@ -493,11 +493,7 @@ option,optgroup{background:var(--bg2)}
           <div class="kpi-val" id="kpiDps" style="color:var(--warn)">&#8212;</div>
         </div>
       </div>
-
-      
-
-<div class="lp-scroll">
-
+      <div class="lp-scroll">
         <div class="lp-card" id="pwrCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">POWER</span>
@@ -508,14 +504,7 @@ option,optgroup{background:var(--bg2)}
               <span class="pwr-eu-unit"> EU</span>
             </div>
           </div>
-          <div class="con-row">
-            <span class="con-lbl">CONSUMPTION</span>
-            <div class="con-bar-wrap"><div id="conBar"></div></div>
-            <span id="pwrPct" style="font-size:10px;font-family:var(--fmono);min-width:32px;text-align:right;flex-shrink:0"></span>
-          </div>
-          <div class="spv-icons" id="spvIcons" style="display:none"></div>
-          <div class="spv-chart" id="spvChart"></div>
-          <div id="navModeBanner">&#9888; Weapons offline &middot; Shields collapsed</div>
+        <div id="navModeBanner">&#9888; Weapons offline &middot; Shields collapsed</div>
           <button class="spv-reset-btn" onclick="resetPwrAdj()">&#8635; RESET POWER</button>
           <div class="spv-modes">
             <button class="spv-mode-btn on" id="mSCM" onclick="setMode('SCM')">SCM MODE</button>
@@ -525,82 +514,30 @@ option,optgroup{background:var(--bg2)}
             <span class="speed-lbl">SPEED</span>
             <span id="modeSpeed">&#8212;</span>
           </div>
-        </div>
-
+        
+<div class="lp-card" id="sigCard" style="display:none">
+          <div class="lp-card-hd"><span class="lp-card-title">SIGNATURES</span></div>
         <div class="lp-card" id="sigCard" style="display:none">
           <div class="lp-card-hd"><span class="lp-card-title">SIGNATURES</span></div>
-          <div class="sig-row"><span class="sig-lbl">IR</span><span class="sig-val" id="sigIR" style="color:var(--warn)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">EM idle</span><span class="sig-val" id="sigEM" style="color:var(--accent)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">EM max</span><span class="sig-val" id="sigEMmax" style="color:var(--red)">&#8212;</span></div>
-        </div>
-
         <div class="dps-block" id="dpsCard" style="display:none">
           <div class="dps-block-hd">FIREPOWER</div>
-          <div class="dps-nums">
-            <div class="dps-cell">
-              <div class="dps-lbl">TOTAL DPS</div>
-              <div class="dps-val" id="totalDPS" style="color:var(--warn)">&#8212;</div>
-            </div>
-            <div class="dps-cell">
-              <div class="dps-lbl">ALPHA</div>
-              <div class="dps-val" id="totalAlpha" style="color:var(--red)">&#8212;</div>
-            </div>
-          </div>
-          <div id="dpsBarsWrap" style="display:none">
-            <div class="dps-bar-hd">BY WEAPON</div>
-            <div id="dpsBars"></div>
-          </div>
-          <div id="shieldSection" style="display:none">
-            <div class="sig-row"><span class="sig-lbl">Shield HP</span><span class="sig-val" id="shpTotal" style="color:var(--green)">&#8212;</span></div>
-            <div class="sig-row"><span class="sig-lbl">Regen/s</span><span class="sig-val" id="shpRegen" style="color:var(--cyan)">&#8212;</span></div>
-            <div class="sig-row"><span class="sig-lbl">Face HP</span><span class="sig-val" id="shpFace">&#8212;</span></div>
-          </div>
-          <div id="maxRange" style="display:none">
-            <div class="sig-row"><span class="sig-lbl">QD Range</span><span class="sig-val" id="qdRange" style="color:var(--accent)">&#8212;</span></div>
-            <div class="sig-row"><span class="sig-lbl">Spool</span><span class="sig-val" id="qdSpool">&#8212;</span></div>
-          </div>
-        </div>
-
-      </div>
-
-
-        <!-- ── LIVE STATS CARD (from Fleetyards) ── -->
         <div class="lp-card" id="liveStatsCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">FLIGHT</span>
           </div>
-          <div class="sig-row"><span class="sig-lbl">AB Speed</span><span class="sig-val" id="statAB" style="color:var(--cyan)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Pitch</span><span class="sig-val" id="statPitch" style="color:var(--t2)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Roll</span><span class="sig-val" id="statRoll" style="color:var(--t2)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Yaw</span><span class="sig-val" id="statYaw" style="color:var(--t2)">&#8212;</span></div>
-        </div>
-
         <div class="lp-card" id="vesselStatsCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">VESSEL</span>
           </div>
-          <div class="sig-row"><span class="sig-lbl">Focus</span><span class="sig-val" id="statFocus" style="color:var(--accent)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Crew</span><span class="sig-val" id="statCrew" style="color:var(--text)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Cargo</span><span class="sig-val" id="statCargo" style="color:var(--warn)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Mass</span><span class="sig-val" id="statMass" style="color:var(--t2)">&#8212;</span></div>
-        </div>
-
         <div class="lp-card" id="dimensionsCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">DIMENSIONS</span>
           </div>
-          <div class="sig-row"><span class="sig-lbl">Length</span><span class="sig-val" id="statLen" style="color:var(--t2)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Beam</span><span class="sig-val" id="statBeam" style="color:var(--t2)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">Height</span><span class="sig-val" id="statHeight" style="color:var(--t2)">&#8212;</span></div>
-        </div>
-
         <div class="lp-card" id="fuelCard" style="display:none">
           <div class="lp-card-hd">
             <span class="lp-card-title">FUEL</span>
           </div>
-          <div class="sig-row"><span class="sig-lbl">H₂ Fuel</span><span class="sig-val" id="statH2" style="color:var(--cyan)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">QT Fuel</span><span class="sig-val" id="statQT" style="color:var(--purple)">&#8212;</span></div>
-        </div>
+      </div>
 
       <div class="lp-foot" style="display:none">
         <button id="genBtn" onclick="generate()" disabled>
@@ -612,6 +549,7 @@ option,optgroup{background:var(--bg2)}
 
     </aside
       </div>
+    
     </aside>
 
 
@@ -1996,6 +1934,7 @@ var _liveSync = {
       if (cached) {
         var result = _liveSync.applyShipData(cached, true);
         _liveSync.log('✓ SYNC: Loaded ' + cached.length + ' ships from cache');
+        if (typeof showToast === 'function') showToast('✓ ' + cached.length + ' ships loaded from cache', 'success');
         return Promise.resolve(result);
       }
     }
@@ -2018,6 +1957,7 @@ var _liveSync = {
       })
       .catch(function(err) {
         _liveSync.log('ERROR: Sync failed — ' + err.message + ' (using local data)');
+        if (typeof showToast === 'function') showToast('⚠ Sync failed — using local data', 'warn');
         return {error: err.message};
       });
   },
@@ -5225,18 +5165,24 @@ function shareLoadout(id, e) {
   }
 }
 
-function showToast(msg) {
+function showToast(msg, type) {
+  var colors = {success: 'var(--green)', warn: 'var(--warn)', error: 'var(--red)'};
+  var borders = {success: 'var(--green-border)', warn: 'var(--warn-border)', error: 'var(--red-border)'};
+  var color = colors[type] || 'var(--accent)';
+  var border = borders[type] || 'var(--accent-border)';
   var t = document.getElementById('mobToast');
   if (!t) {
     t = document.createElement('div');
     t.id = 'mobToast';
-    t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--accent);border-radius:var(--r);padding:10px 20px;font-size:12px;font-family:var(--fmono);color:var(--accent);z-index:9999;transition:opacity .3s;pointer-events:none';
+    t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--bg3);border-radius:var(--r);padding:8px 18px;font-size:11px;font-family:var(--fmono);letter-spacing:.5px;z-index:9999;pointer-events:none;transition:opacity .4s;box-shadow:0 4px 20px rgba(0,0,0,.5);border-left:3px solid var(--accent)';
     document.body.appendChild(t);
   }
-  t.innerHTML = msg;
+  t.textContent = msg;
+  t.style.color = color;
+  t.style.borderLeftColor = border;
   t.style.opacity = '1';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 2000);
+  if (t._timer) clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.style.opacity = '0'; }, 3000);
 }
 
 
@@ -5553,43 +5499,38 @@ function filterShipsBySize(size) {
 var _fyCache = {}; // per-ship cache
 
 function fetchLiveStats(shipName) {
-  // Hide all live cards while loading
   ['liveStatsCard','vesselStatsCard','dimensionsCard','fuelCard'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.style.display='none';
   });
 
-  // Check cache first
-  if (_fyCache[shipName]) {
-    _applyLiveStats(_fyCache[shipName]);
-    return;
-  }
+  // Cache hit
+  if (_fyCache[shipName]) { _applyLiveStats(_fyCache[shipName]); return; }
 
-  // Build slug from fleetyards erkulIdentifier if we have it, or derive it
+  // Get slug from live sync ship list (most reliable)
+  var slug = '';
   var def = SHIP_DATA[shipName] || {};
-  var slug = def._fySlug || '';
+  if (def._fySlug) { slug = def._fySlug; }
+  else if (window._liveSync && window._liveSync._lastShips && window._liveSync._lastShips.length) {
+    var found = window._liveSync._lastShips.find(function(s){ return s.name === shipName; });
+    if (found) { slug = found.slug; def._fySlug = slug; }
+  }
 
-  // If no slug from sync, try to derive: "Aegis Dynamics" + "Gladius" -> "aegs-gladius"
-  if (!slug) {
-    // Use the _liveSync cache if available
-    if (window._liveSync && window._liveSync._lastShips) {
-      var found = window._liveSync._lastShips.find(function(s){ return s.name === shipName; });
-      if (found) slug = found.slug;
+  if (slug) { fetchLiveStatsBySlug(shipName, slug); return; }
+
+  // No sync data yet — fetch full list to find slug
+  // (Fleetyards has no search API, must use full list)
+  _liveSync.fetchAllShips().then(function(ships) {
+    window._liveSync._lastShips = ships;
+    // Apply sync data while we have it
+    _liveSync.applyShipData(ships, true);
+    var found = ships.find(function(s){ return s.name === shipName; });
+    if (found) {
+      def._fySlug = found.slug;
+      fetchLiveStatsBySlug(shipName, found.slug);
+    } else {
+      console.log('[FY] Ship not found in Fleetyards:', shipName);
     }
-  }
-
-  if (!slug) {
-    // Fallback: fetch search
-    fetch('https://api.fleetyards.net/v1/models?q=' + encodeURIComponent(shipName) + '&perPage=3')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        var match = (d.items||[]).find(function(s){ return s.name===shipName; });
-        if (match) { slug = match.slug; fetchLiveStatsBySlug(shipName, slug); }
-      })
-      .catch(function(){});
-    return;
-  }
-
-  fetchLiveStatsBySlug(shipName, slug);
+  }).catch(function(e){ console.log('[FY] list error:', e.message); });
 }
 
 function fetchLiveStatsBySlug(shipName, slug) {
