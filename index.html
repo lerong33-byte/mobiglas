@@ -436,17 +436,66 @@ option,optgroup{background:var(--bg2)}
 #loContent::after{bottom:8px;right:8px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent);}
 #loContent{position:relative;}
 
+
+/* ── Collapsible LP cards ── */
+.lp-card-hd{cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.lp-card-hd .lp-card-title{flex:1}
+.lp-card-hd::after{content:'▾';font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0;line-height:1}
+.lp-card.collapsed>.sig-row,
+.lp-card.collapsed>.con-row,
+.lp-card.collapsed>.con-bar-wrap,
+.lp-card.collapsed>.spv-icons,
+.lp-card.collapsed>.spv-chart,
+.lp-card.collapsed>.spv-modes,
+.lp-card.collapsed>.speed-row,
+.lp-card.collapsed>.reset-pwr,
+.lp-card.collapsed>#navModeBanner,
+.lp-card.collapsed>#dpsBarsWrap,
+.lp-card.collapsed>#shieldSection,
+.lp-card.collapsed>div:not(.lp-card-hd){display:none!important}
+.dps-block .lp-card-hd{cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.dps-block .lp-card-hd::after{content:'▾';font-size:10px;color:var(--t3);transition:transform .2s}
+.dps-block.collapsed .lp-card-hd::after{transform:rotate(-90deg)}
+.dps-block.collapsed>*:not(.lp-card-hd){display:none!important}
+.lp-card.collapsed .lp-card-hd::after{transform:rotate(-90deg)}
+
+
+/* ── Unified search boxes ── */
+.search-box{position:relative;display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 10px;gap:6px;transition:border-color .15s}
+.search-box:focus-within{border-color:var(--accent)}
+.search-box .search-icon{color:var(--t3);font-size:12px;flex-shrink:0;pointer-events:none}
+.search-box input{flex:1;background:none;border:none;outline:none;font-size:12px;color:var(--text);padding:6px 0;font-family:var(--fhud)}
+.search-box input::placeholder{color:var(--t3)}
+.search-box .search-clear{cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none;flex-shrink:0;padding:2px;display:none}
+.search-box .search-clear:hover{color:var(--text)}
+.search-dropdown{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:500;max-height:320px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.search-dropdown .sd-group{padding:4px 10px 2px;font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);background:var(--bg3);border-bottom:1px solid var(--border);position:sticky;top:0}
+.search-dropdown .sd-item{padding:6px 12px;font-size:12px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px;font-family:var(--fhud)}
+.search-dropdown .sd-item:hover{background:var(--bg4);color:var(--accent)}
+.search-dropdown .sd-item .sd-size{font-size:9px;font-family:var(--fmono);color:var(--t3);background:var(--bg4);border-radius:3px;padding:1px 5px}
+.search-dropdown .sd-empty{padding:10px 12px;font-size:11px;color:var(--t3);font-style:italic;text-align:center}
+
 </style>
 
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.49</span></div>
-    <div class="nav-search-wrap">
-      <span class="nav-search-icon">&#9906;</span>
-      <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
-      <span id="sSearchClear" onclick="clearShipSearch()" style="cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:2px 4px;display:none;user-select:none" title="Clear">&#10005;</span>
-      <div id="srbox"></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.55</span></div>
+    <div class="nav-search-wrap search-box">
+      <span class="search-icon">&#9906;</span>
+      <input type="text" id="sSearch" placeholder="Search ships…" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
+      <span id="sSearchClear" class="search-clear" onclick="clearShipSearch()" title="Clear">&#10005;</span>
+      <div id="srbox" class="search-dropdown"></div>
+    </div>
+    <div style="font-size:9px;color:var(--border);font-family:var(--fmono);padding:0 4px;flex-shrink:0">VS</div>
+    <div class="nav-search-wrap search-box" id="tgtSearchWrap">
+      <span class="search-icon">&#9906;</span>
+      <input type="text" id="tgtSearch" placeholder="Search target…" autocomplete="off"
+        oninput="onTgtSearch(this.value)"
+        onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
+        onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"/>
+      <span id="tgtSearchClear" class="search-clear" onclick="clearTgtSearch()" title="Clear">&#10005;</span>
+      <div id="tgtDropdown" class="search-dropdown"></div>
     </div>
     <div class="nav-divider" style="display:none"></div>
     <div class="nav-ship" style="display:none">
@@ -461,7 +510,7 @@ option,optgroup{background:var(--bg2)}
       <select id="actSel" onchange="onActChange(this.value)"></select>
     </div>
     <div class="nav-end" style="display:flex;align-items:center;gap:10px">
-      <span id="syncStatus" style="font-size:8px;font-family:var(--fmono);color:var(--t3);letter-spacing:.5px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Live data sync status"></span>
+      <span id="syncStatus" style="font-size:8px;font-family:var(--fmono);color:var(--green);letter-spacing:.5px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Live data sync status"></span>
       <span id="hpatch">&#9679; LOADING&hellip;</span>
     </div>
   </nav>
@@ -663,17 +712,7 @@ option,optgroup{background:var(--bg2)}
 
         <aside class="rp">
       <div class="rp-scroll">
-        <div style="font-size:9px;letter-spacing:1.5px;color:var(--accent);font-family:var(--fmono);margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border)">⊕ TARGET SHIP</div>
-        <div style="position:relative;display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 8px;gap:6px;margin-bottom:4px">
-          <span style="color:var(--t3);font-size:12px">&#9906;</span>
-          <input id="tgtSearch" type="text" placeholder="Search target…" autocomplete="off"
-            oninput="onTgtSearch(this.value)"
-            onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
-            onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"
-            style="flex:1;background:none;border:none;outline:none;font-size:11px;color:var(--text);padding:5px 0;font-family:var(--fhud)"/>
-          <span id="tgtSearchClear" onclick="clearTgtSearch()" style="display:none;cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none" title="Clear">&#10005;</span>
-          <div id="tgtDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:200;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.5)"></div>
-        </div>
+        <div id="tgtSelected2" style="display:none;font-size:10px;font-family:var(--fmono);color:var(--t3);margin-bottom:6px;padding:0 2px">&#9906; <span id="tgtSelectedLabel2" style="color:var(--text)"></span></div>
         <select id="tgtSel" class="tgt-sel-dd" style="display:none"><option value="">— Select target —</option></select>
         <div id="tgtSelected" style="display:none!important">
           <span id="tgtSelectedName"></span>
@@ -4544,6 +4583,12 @@ function loadTargetImage(shipName) {
 
 function selectTarget(name) {
   _currentTarget = name;
+  // Update nav target search box
+  var tsi = document.getElementById('tgtSearch'); if(tsi) tsi.value = name;
+  var tsc = document.getElementById('tgtSearchClear'); if(tsc) tsc.style.display = name?'block':'none';
+  // Update RP label
+  var lbl = document.getElementById('tgtSelectedLabel2'); if(lbl) lbl.textContent = name;
+  var sel2 = document.getElementById('tgtSelected2'); if(sel2) sel2.style.display = name?'block':'none';
   loadTargetImage(name);
   var _ts=document.getElementById('tgtSel');if(_ts&&_ts.value!==name)_ts.value=name;
   var inp = document.getElementById('tgtSearch'); if (inp) inp.value = name;
@@ -4556,6 +4601,9 @@ function selectTarget(name) {
 
 function clearTarget() {
   _currentTarget = '';
+  var tsi = document.getElementById('tgtSearch'); if(tsi) tsi.value = '';
+  var tsc = document.getElementById('tgtSearchClear'); if(tsc) tsc.style.display='none';
+  var sel2 = document.getElementById('tgtSelected2'); if(sel2) sel2.style.display='none';
   var inp = document.getElementById('tgtSearch'); if (inp) inp.value = '';
   var clr = document.getElementById('tgtSearchClear'); if (clr) clr.style.display = 'none';
   // Force hide - bypass the guard
@@ -5169,8 +5217,8 @@ function shareLoadout(id, e) {
 function showToast(msg, type) {
   var colors = {success: 'var(--green)', warn: 'var(--warn)', error: 'var(--red)'};
   var borders = {success: 'var(--green-border)', warn: 'var(--warn-border)', error: 'var(--red-border)'};
-  var color = colors[type] || 'var(--accent)';
-  var border = borders[type] || 'var(--accent-border)';
+  var color = colors[type] || 'var(--green)';
+  var border = borders[type] || 'var(--green-border)';
   var t = document.getElementById('mobToast');
   if (!t) {
     t = document.createElement('div');
@@ -5603,6 +5651,52 @@ function _applyLiveStats(d) {
     show('fuelCard');
   }
 }
+
+
+// ── Collapsible LP cards ──
+(function(){
+  var STORAGE_KEY = 'mobiglas_collapsed_v2';
+  function getCollapsed(){ try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){return [];} }
+  function saveCollapsed(ids){ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(ids));}catch(e){} }
+
+  function initCard(card){
+    var hd = card.querySelector('.lp-card-hd');
+    if (!hd || hd.dataset.collapseInit) return;
+    hd.dataset.collapseInit = '1';
+    hd.addEventListener('click', function(e){
+      e.stopPropagation();
+      card.classList.toggle('collapsed');
+      var id = card.id; if(!id) return;
+      var arr = getCollapsed();
+      if(card.classList.contains('collapsed')){ if(!arr.includes(id)) arr.push(id); }
+      else { arr = arr.filter(function(x){return x!==id;}); }
+      saveCollapsed(arr);
+    });
+  }
+
+  function restoreCollapsed(){
+    getCollapsed().forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.classList.add('collapsed');
+    });
+  }
+
+  function initAll(){
+    document.querySelectorAll('.lp-card, .dps-block').forEach(initCard);
+  }
+
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      initAll();
+      restoreCollapsed();
+      // Re-init when lp-scroll contents change (e.g. after generate)
+      var lpScroll = document.querySelector('.lp-scroll');
+      if(lpScroll){
+        new MutationObserver(initAll).observe(lpScroll, {childList:true, subtree:false});
+      }
+    }, 500);
+  });
+})();
 
 </script>
 
