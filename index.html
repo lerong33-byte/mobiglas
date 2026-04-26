@@ -336,6 +336,7 @@ option,optgroup{background:var(--bg2)}
 /* Legacy hidden elements */
 .spv-con-row,.spv-out-row,.rp-dps-bloc,.rp-power-block,.rp-sigs,.rp-ship-img-wrap,.rp-sync-row,.gbw,.lpb,.lpb--grow,.lp-pip-wrap,.pip-groups,.pip-group,.pips,.preset-row,.pre-btn,.acts,.abt,.inp,.sel,.srbox-old,#wikiSyncSec{display:none!important}
 
+.tgt-opt{padding:6px 11px;font-size:12px;cursor:pointer;border-bottom:0.5px solid var(--border);color:var(--text)}.tgt-opt:hover{background:var(--bg3)}
 .tgt-sel-dd{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 8px;font-size:11px;color:var(--text);font-family:var(--fhud);outline:none;cursor:pointer;margin-bottom:4px}
 .tgt-sel-dd:focus{border-color:var(--red)}
 
@@ -393,7 +394,7 @@ option,optgroup{background:var(--bg2)}
     <div class="nav-logo">MOBIGLAS</div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
-      <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" autocomplete="off"/>
+      <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
       <span id="sSearchClear" onclick="clearShipSearch()" style="cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:2px 4px;display:none;user-select:none" title="Clear">&#10005;</span>
       <div id="srbox"></div>
     </div>
@@ -650,15 +651,20 @@ option,optgroup{background:var(--bg2)}
 
         <div class="tgt-panel-inner" id="tgtPanel">
           <div class="tgt-title">TARGET ANALYSIS</div>
-          <select id="tgtSel" class="tgt-sel-dd">
+          <select id="tgtSel" class="tgt-sel-dd" style="display:none">
             <option value="">— Select target —</option>
           </select>
-          <div style="position:relative;display:none">
-            <input id="tgtSearch" type="text" placeholder="Search target ship&hellip;" autocomplete="off"
-              oninput="onTgtSearch(this.value)"/>
-            <div id="tgtDropdown" style="display:none"></div>
+          <div style="position:relative;display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 8px;gap:6px;margin-bottom:4px">
+            <span style="color:var(--t3);font-size:12px">&#9906;</span>
+            <input id="tgtSearch" type="text" placeholder="Search target…" autocomplete="off"
+              oninput="onTgtSearch(this.value)"
+              onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
+              onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"
+              style="flex:1;background:none;border:none;outline:none;font-size:11px;color:var(--text);padding:5px 0;font-family:var(--fhud)"/>
+            <span id="tgtSearchClear" onclick="clearTgtSearch()" style="display:none;cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none" title="Clear">&#10005;</span>
+            <div id="tgtDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:200;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.5)"></div>
           </div>
-          <div id="tgtSelected">
+          <div id="tgtSelected" style="display:none!important">
             <span id="tgtSelectedName"></span>
             <button onclick="clearTarget()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:15px;padding:0;line-height:1">&#215;</button>
           </div>
@@ -2065,7 +2071,10 @@ function onActChange(val){selAct=val;if(selShip)generate();}
   document.getElementById('hpatch').textContent='● '+total+' HULLS · PATCH 4.7.1 LIVE';
   var as=document.getElementById('actSel');
   if(as){ACTS.forEach(function(a){var o=document.createElement('option');o.value=a;o.textContent=a;if(a===selAct)o.selected=true;as.appendChild(o);});}
-  document.addEventListener('click',function(e){var sb=document.getElementById('srbox'),si=document.getElementById('sSearch');if(sb&&si&&!sb.contains(e.target)&&e.target!==si)sb.style.display='none';});
+  document.addEventListener('click',function(e){
+  var sb=document.getElementById('srbox'),si=document.getElementById('sSearch'),clr=document.getElementById('sSearchClear');
+  if(sb&&si&&!sb.contains(e.target)&&e.target!==si&&e.target!==clr)sb.style.display='none';
+});
   buildWeaponsDB('all','all');
   var tgtSel=document.getElementById('tgtSel');
   if(tgtSel){Object.keys(SHIPS).sort().forEach(function(mfr){var og=document.createElement('optgroup');og.label=mfr;if(!SHIPS[mfr])return;SHIPS[mfr].sort().forEach(function(s){if(!SHIP_DATA[s])return;var o=document.createElement('option');o.value=s;o.textContent=s;og.appendChild(o);});if(og.children.length)tgtSel.appendChild(og);});
@@ -2107,9 +2116,10 @@ function buildSrbox(q) {
     });
     sb.innerHTML = html;
     Array.prototype.forEach.call(sb.querySelectorAll('.sri'), function(el) {
-      el.onclick = function() {
-        pick(decodeURIComponent(this.getAttribute('data-n')));
-        document.getElementById('sSearch').value = decodeURIComponent(this.getAttribute('data-n'));
+      el.onmousedown = function(e) {
+        e.preventDefault(); // Prevent input blur
+        var name = decodeURIComponent(this.getAttribute('data-n'));
+        pick(name);
         sb.style.display = 'none';
       };
     });
@@ -2129,15 +2139,14 @@ function clearShipSearch() {
   var clr = document.getElementById('sSearchClear');
   if (si) si.value = '';
   if (clr) clr.style.display = 'none';
-  // Show all ships immediately after clearing
   buildSrbox('');
-  si && si.focus();
+  if (si) si.focus();
 }
 function pick(n){
   if(!n)return;
   selShip=n;
   if(userPwrAdj)delete userPwrAdj[n];
-  var si=document.getElementById('sSearch');if(si){si.value=n;if(si.blur)si.blur();}var _clr=document.getElementById('sSearchClear');if(_clr)_clr.style.display='block';
+  var si=document.getElementById('sSearch');if(si)si.value=n;var _clr=document.getElementById('sSearchClear');if(_clr)_clr.style.display='block';
   var sb=document.getElementById('srbox');if(sb)sb.style.display='none';
   var ss=document.getElementById('sSel');if(ss){ss.value=n;}
   setTag(n);generate();updatePower();if(_currentTarget)loadTargetImage(_currentTarget);var _flp=fetchLiveShipData(n);if(_flp&&_flp.then)_flp.then(function(){updatePower();if(_currentTarget)loadTargetImage(_currentTarget);});
@@ -4021,6 +4030,7 @@ function selectTarget(name) {
   loadTargetImage(name);
   var _ts=document.getElementById('tgtSel');if(_ts&&_ts.value!==name)_ts.value=name;
   var inp = document.getElementById('tgtSearch'); if (inp) inp.value = name;
+  var clr = document.getElementById('tgtSearchClear'); if (clr) clr.style.display = name ? 'block' : 'none';
   var dd = document.getElementById('tgtDropdown'); if (dd) dd.style.display = 'none';
   var nm = document.getElementById('tgtSelectedName'); if (nm) nm.textContent = name;
   var sw = document.getElementById('tgtSelected'); if (sw) sw.style.display = 'flex';
@@ -4029,6 +4039,8 @@ function selectTarget(name) {
 
 function clearTarget() {
   _currentTarget = '';
+  var inp = document.getElementById('tgtSearch'); if (inp) inp.value = '';
+  var clr = document.getElementById('tgtSearchClear'); if (clr) clr.style.display = 'none';
   // Force hide - bypass the guard
   var wrap = document.getElementById('tgtImgWrap');
   var img = document.getElementById('tgtImg');
@@ -4043,22 +4055,66 @@ function clearTarget() {
   updateTargetAnalysis('');
 }
 
-function onTgtSearch(val) {
+function buildTgtDropdown(q) {
   var dd = document.getElementById('tgtDropdown'); if (!dd) return;
-  var q = val.trim().toLowerCase();
-  if (!q) { dd.style.display = 'none'; return; }
-  var res = Object.keys(SHIP_DATA).filter(function(n) { return n.toLowerCase().includes(q); }).sort();
-  if (!res.length) { dd.innerHTML = '<div style="padding:8px 10px;font-size:12px;color:var(--t3)">No ships found</div>'; dd.style.display = 'block'; return; }
-  dd.innerHTML = res.map(function(n) {
-    return '<div class="tgt-opt" style="padding:8px 11px;font-size:13px;cursor:pointer;border-bottom:0.5px solid var(--border);color:var(--text)" data-s="'+encodeURIComponent(n)+'" onclick="selectTarget(decodeURIComponent(this.dataset.s))">'+n+'</div>';
-  }).join('');;
+  var byMfr = {};
+  Object.keys(SHIPS).sort().forEach(function(mfr) {
+    if (!SHIPS[mfr]) return;
+    SHIPS[mfr].forEach(function(s) {
+      if (!SHIP_DATA[s]) return;
+      if (!q || s.toLowerCase().includes(q) || mfr.toLowerCase().includes(q)) {
+        if (!byMfr[mfr]) byMfr[mfr] = [];
+        byMfr[mfr].push(s);
+      }
+    });
+  });
+  var html = '', total = 0;
+  Object.keys(byMfr).sort().forEach(function(mfr) {
+    html += '<div style="padding:3px 10px 2px;font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);background:var(--bg3);border-bottom:1px solid var(--border)">' + mfr + '</div>';
+    byMfr[mfr].forEach(function(s) {
+      var active = s === _currentTarget ? ';background:rgba(239,68,68,.1);color:var(--red)' : '';
+      html += '<div class="tgt-opt" data-s="' + encodeURIComponent(s) + '" style="' + active + '">' + s + '</div>';
+      total++;
+    });
+  });
+  dd.innerHTML = total ? html : '<div style="padding:8px 10px;font-size:11px;color:var(--t3)">No ships found</div>';
+  if (total) {
+    Array.prototype.forEach.call(dd.querySelectorAll('.tgt-opt'), function(el) {
+      el.onmousedown = function(e) {
+        e.preventDefault();
+        var name = decodeURIComponent(this.getAttribute('data-s'));
+        selectTarget(name);
+        var inp = document.getElementById('tgtSearch'); if (inp) inp.value = name;
+        var clr = document.getElementById('tgtSearchClear'); if (clr) clr.style.display = 'block';
+        dd.style.display = 'none';
+      };
+    });
+  }
   dd.style.display = 'block';
 }
+
+function onTgtSearch(val) {
+  var q = val.trim().toLowerCase();
+  var clr = document.getElementById('tgtSearchClear');
+  if (clr) clr.style.display = val ? 'block' : 'none';
+  buildTgtDropdown(q);
+}
+
+function clearTgtSearch() {
+  var inp = document.getElementById('tgtSearch');
+  var clr = document.getElementById('tgtSearchClear');
+  if (inp) inp.value = '';
+  if (clr) clr.style.display = 'none';
+  buildTgtDropdown('');
+  if (inp) inp.focus();
+}
+
 
 document.addEventListener('click', function(e) {
   var dd = document.getElementById('tgtDropdown');
   var inp = document.getElementById('tgtSearch');
-  if (dd && inp && !dd.contains(e.target) && e.target !== inp) dd.style.display = 'none';
+  var clr = document.getElementById('tgtSearchClear');
+  if (dd && inp && !dd.contains(e.target) && e.target !== inp && e.target !== clr) dd.style.display = 'none';
 });
 
 // ═══ SAVE / LOAD LOADOUTS ═══
