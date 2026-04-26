@@ -441,7 +441,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.35</span></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.37</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -460,7 +460,8 @@ option,optgroup{background:var(--bg2)}
       <span class="nav-act-lbl">ACTIVITY</span>
       <select id="actSel" onchange="onActChange(this.value)"></select>
     </div>
-    <div class="nav-end">
+    <div class="nav-end" style="display:flex;align-items:center;gap:10px">
+      <span id="syncStatus" style="font-size:8px;font-family:var(--fmono);color:var(--t3);letter-spacing:.5px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="Live data sync status"></span>
       <span id="hpatch">&#9679; LOADING&hellip;</span>
     </div>
   </nav>
@@ -561,6 +562,45 @@ option,optgroup{background:var(--bg2)}
         </div>
 
       </div>
+
+
+        <!-- ── LIVE STATS CARD (from Fleetyards) ── -->
+        <div class="lp-card" id="liveStatsCard" style="display:none">
+          <div class="lp-card-hd">
+            <span class="lp-card-title">FLIGHT</span>
+          </div>
+          <div class="sig-row"><span class="sig-lbl">AB Speed</span><span class="sig-val" id="statAB" style="color:var(--cyan)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Pitch</span><span class="sig-val" id="statPitch" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Roll</span><span class="sig-val" id="statRoll" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Yaw</span><span class="sig-val" id="statYaw" style="color:var(--t2)">&#8212;</span></div>
+        </div>
+
+        <div class="lp-card" id="vesselStatsCard" style="display:none">
+          <div class="lp-card-hd">
+            <span class="lp-card-title">VESSEL</span>
+          </div>
+          <div class="sig-row"><span class="sig-lbl">Focus</span><span class="sig-val" id="statFocus" style="color:var(--accent)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Crew</span><span class="sig-val" id="statCrew" style="color:var(--text)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Cargo</span><span class="sig-val" id="statCargo" style="color:var(--warn)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Mass</span><span class="sig-val" id="statMass" style="color:var(--t2)">&#8212;</span></div>
+        </div>
+
+        <div class="lp-card" id="dimensionsCard" style="display:none">
+          <div class="lp-card-hd">
+            <span class="lp-card-title">DIMENSIONS</span>
+          </div>
+          <div class="sig-row"><span class="sig-lbl">Length</span><span class="sig-val" id="statLen" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Beam</span><span class="sig-val" id="statBeam" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Height</span><span class="sig-val" id="statHeight" style="color:var(--t2)">&#8212;</span></div>
+        </div>
+
+        <div class="lp-card" id="fuelCard" style="display:none">
+          <div class="lp-card-hd">
+            <span class="lp-card-title">FUEL</span>
+          </div>
+          <div class="sig-row"><span class="sig-lbl">H₂ Fuel</span><span class="sig-val" id="statH2" style="color:var(--cyan)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">QT Fuel</span><span class="sig-val" id="statQT" style="color:var(--purple)">&#8212;</span></div>
+        </div>
 
       <div class="lp-foot" style="display:none">
         <button id="genBtn" onclick="generate()" disabled>
@@ -1758,6 +1798,269 @@ var LOCATIONS=[
   {name:"Grey's Market — Pyro",sys:"Pyro System",tags:["ships","outlaw"],st:"The Shiv heavy fighter (aUEC purchase — only in-game source). Pyro-exclusive weapon variants and salvaged military components.",tip:"Bring armed escort — pirates camp the Stanton→Pyro jump point. Only place to buy Shiv."}
 ];
 
+
+
+// ═══════════════════════════════════════════════════════
+// ◈ LIVE DATA SYNC — Fleetyards API polling system
+// Polls fleetyards.net for ship list/speed changes
+// Falls back gracefully if offline
+// ═══════════════════════════════════════════════════════
+var _liveSync = {
+  FY_API: 'https://api.fleetyards.net/v1',
+  POLL_INTERVAL: 30 * 60 * 1000, // poll every 30 min
+  CACHE_KEY: 'mobiglas_fy_cache',
+  CACHE_TS_KEY: 'mobiglas_fy_ts',
+  CACHE_TTL: 60 * 60 * 1000, // 1 hour cache
+  _timer: null,
+  _lastHash: null,
+  _changeLog: [],
+
+  // Size mapping from fleetyards to our size codes
+  SIZE_MAP: {
+    'vehicle': 'XS', 'snub': 'XS', 'starter': 'XS',
+    'small': 'S', 'medium': 'M', 'large': 'L',
+    'capital': 'XL', 'extra large': 'XL'
+  },
+
+  // Classification mapping
+  CLASS_MAP: {
+    'combat': 'Fighter', 'multi': 'Support', 'transport': 'Transport',
+    'exploration': 'Exploration', 'competition': 'Racing',
+    'industrial': 'Mining', 'support': 'Support', 'ground': 'Starter'
+  },
+
+  log: function(msg) {
+    var ts = new Date().toLocaleTimeString();
+    _liveSync._changeLog.unshift('[' + ts + '] ' + msg);
+    if (_liveSync._changeLog.length > 50) _liveSync._changeLog.pop();
+    console.log('[MOBIGLAS SYNC] ' + msg);
+    _liveSync._updateSyncStatus(msg);
+  },
+
+  _updateSyncStatus: function(msg) {
+    var el = document.getElementById('syncStatus');
+    if (el) {
+      el.textContent = msg;
+      el.style.color = msg.includes('ERROR') ? 'var(--red)' : msg.includes('NEW') || msg.includes('CHANGED') ? 'var(--green)' : 'var(--t3)';
+    }
+  },
+
+  // Fetch all ships from Fleetyards (max 240 per page, ~235 total)
+  fetchAllShips: function() {
+    return fetch(_liveSync.FY_API + '/models?perPage=240&withMetrics=true')
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(d) { return d.items || []; });
+  },
+
+  // Build a simple hash of ship data to detect changes
+  hashShips: function(ships) {
+    return ships.map(function(s) {
+      return s.slug + ':' + (s.speeds && s.speeds.scmSpeed || 0) + ':' + (s.metrics && s.metrics.size || '') + ':' + s.lastUpdatedAt;
+    }).join('|');
+  },
+
+  // Apply live ship data - updates SCM speeds and adds new ships
+  applyShipData: function(ships, isBackground) {
+    var newShips = [], changedSpeeds = [], newCount = 0, updCount = 0;
+
+    ships.forEach(function(fy) {
+      if (!fy.inGame) return; // skip concept/not in game
+      var name = fy.name;
+      var mfr = fy.manufacturer ? fy.manufacturer.name : 'Unknown';
+
+      // Check if we have this ship
+      var existingDef = SHIP_DATA[name];
+
+      if (!existingDef) {
+        // New ship not in our DB
+        newShips.push({name: name, mfr: mfr, fy: fy});
+        newCount++;
+      } else {
+        // Update SCM speed if changed
+        if (fy.speeds && fy.speeds.scmSpeed) {
+          var newSCM = Math.round(fy.speeds.scmSpeed);
+          if (existingDef.scm && Math.abs(existingDef.scm - newSCM) > 2) {
+            var old = existingDef.scm;
+            existingDef.scm = newSCM;
+            changedSpeeds.push(name + ' SCM: ' + old + '→' + newSCM);
+            updCount++;
+          }
+        }
+        // Update max speed (afterburner)
+        if (fy.speeds && fy.speeds.scmSpeedBoosted) {
+          var newAB = Math.round(fy.speeds.scmSpeedBoosted);
+          if (existingDef.maxSpeed && Math.abs(existingDef.maxSpeed - newAB) > 5) {
+            existingDef.maxSpeed = newAB;
+          }
+        }
+        // Update cargo
+        if (fy.metrics && fy.metrics.cargo !== undefined && existingDef.cargo !== undefined) {
+          var newCargo = fy.metrics.cargo;
+          if (newCargo !== existingDef.cargo) {
+            existingDef.cargo = newCargo;
+          }
+        }
+      }
+    });
+
+    // Register new ships into SHIPS and SHIP_DATA
+    newShips.forEach(function(ns) {
+      var fy = ns.fy;
+      var size = _liveSync.SIZE_MAP[(fy.metrics && fy.metrics.size || '').toLowerCase()] || 'S';
+      var role = _liveSync.CLASS_MAP[(fy.classification || '').toLowerCase()] || 'Support';
+      var mfr = ns.mfr;
+
+      // Add to SHIPS grouped by manufacturer
+      if (!SHIPS[mfr]) SHIPS[mfr] = [];
+      if (SHIPS[mfr].indexOf(ns.name) < 0) {
+        SHIPS[mfr].push(ns.name);
+        SHIPS[mfr].sort();
+      }
+
+      // Add to SHIP_DATA
+      SHIP_DATA[ns.name] = {
+        mfr: mfr,
+        role: role,
+        size: size,
+        crew: fy.crew ? fy.crew.max : 1,
+        scm: fy.speeds ? Math.round(fy.speeds.scmSpeed || 0) : 0,
+        maxSpeed: fy.speeds ? Math.round(fy.speeds.scmSpeedBoosted || 0) : 0,
+        cargo: fy.metrics ? (fy.metrics.cargo || 0) : 0,
+        hp: 0, // not available from fleetyards
+        shieldHp: 0,
+        // Mark as live-synced
+        _liveSynced: true,
+        _fySlug: fy.slug,
+        _fyId: fy.id
+      };
+    });
+
+    if (!isBackground) {
+      if (newCount > 0) {
+        _liveSync.log('✦ SYNC: ' + newCount + ' new ship(s) added — ' + newShips.map(function(s){return s.name;}).join(', '));
+        // Refresh dashboard counts
+        if (typeof renderDashboard === 'function') renderDashboard();
+        // Update hull count in nav
+        var total = Object.values(SHIPS).reduce(function(a,b){return a+(b?b.length:0);},0);
+        var hp = document.getElementById('hpatch');
+        if (hp) hp.textContent = '● ' + total + ' HULLS · PU ' + (_liveSync._scVer || '4.7.2') + ' LIVE';
+        // Rebuild ship search if open
+        var srbox = document.getElementById('srbox');
+        if (srbox && srbox.style.display !== 'none') buildSrbox('');
+        // Show toast notification
+        if (typeof showToast === 'function') showToast('⬆ ' + newCount + ' new ship(s) synced from live data');
+      }
+      if (updCount > 0) {
+        _liveSync.log('↻ SYNC: ' + updCount + ' stat update(s) — ' + changedSpeeds.slice(0,5).join(', '));
+        // Re-render if current ship was updated
+        if (selShip && (changedSpeeds.some(function(s){return s.indexOf(selShip)>=0;}))) {
+          if (typeof generate === 'function') generate();
+        }
+        if (typeof showToast === 'function' && updCount > 0) showToast('↻ ' + updCount + ' ship stat(s) updated');
+      }
+      if (newCount === 0 && updCount === 0) {
+        _liveSync.log('✓ SYNC: All ' + ships.filter(function(s){return s.inGame;}).length + ' ships current — ' + new Date().toLocaleTimeString());
+      }
+    }
+
+    return {newCount: newCount, updCount: updCount, changes: changedSpeeds};
+  },
+
+  // Cache management
+  saveCache: function(ships) {
+    try {
+      localStorage.setItem(_liveSync.CACHE_KEY, JSON.stringify(ships));
+      localStorage.setItem(_liveSync.CACHE_TS_KEY, Date.now().toString());
+    } catch(e) { /* localStorage may be unavailable */ }
+  },
+
+  loadCache: function() {
+    try {
+      var ts = parseInt(localStorage.getItem(_liveSync.CACHE_TS_KEY) || '0');
+      if (Date.now() - ts > _liveSync.CACHE_TTL) return null;
+      var data = localStorage.getItem(_liveSync.CACHE_KEY);
+      return data ? JSON.parse(data) : null;
+    } catch(e) { return null; }
+  },
+
+  // Main sync function
+  sync: function(force) {
+    _liveSync._updateSyncStatus('Syncing...');
+
+    // Check cache first (unless forced)
+    if (!force) {
+      var cached = _liveSync.loadCache();
+      if (cached) {
+        var result = _liveSync.applyShipData(cached, true);
+        _liveSync.log('✓ SYNC: Loaded ' + cached.length + ' ships from cache');
+        return Promise.resolve(result);
+      }
+    }
+
+    return _liveSync.fetchAllShips()
+      .then(function(ships) {
+        // Check if anything changed via hash
+        var newHash = _liveSync.hashShips(ships);
+        var changed = (newHash !== _liveSync._lastHash);
+        _liveSync._lastHash = newHash;
+        _liveSync.saveCache(ships);
+
+        if (changed || force) {
+          _liveSync._lastShips = ships;
+        return _liveSync.applyShipData(ships, false);
+        } else {
+          _liveSync.log('✓ SYNC: No changes detected — ' + new Date().toLocaleTimeString());
+          return {newCount: 0, updCount: 0};
+        }
+      })
+      .catch(function(err) {
+        _liveSync.log('ERROR: Sync failed — ' + err.message + ' (using local data)');
+        return {error: err.message};
+      });
+  },
+
+  // Start polling
+  start: function() {
+    // Initial sync on page load
+    _liveSync.sync(false);
+
+    // Set up recurring poll
+    _liveSync._timer = setInterval(function() {
+      _liveSync.sync(false);
+    }, _liveSync.POLL_INTERVAL);
+
+    // Also sync when tab becomes visible after being hidden
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        // If tab was hidden >30min, re-sync
+        var ts = parseInt(localStorage.getItem(_liveSync.CACHE_TS_KEY) || '0');
+        if (Date.now() - ts > _liveSync.POLL_INTERVAL) {
+          _liveSync.sync(false);
+        }
+      }
+    });
+
+    console.log('[MOBIGLAS SYNC] Live polling started — interval: 30min');
+  },
+
+  stop: function() {
+    if (_liveSync._timer) clearInterval(_liveSync._timer);
+  },
+
+  // Force manual resync
+  forceSync: function() {
+    _liveSync.log('↺ Manual sync triggered...');
+    return _liveSync.sync(true);
+  }
+};
+
+// Start live sync when page loads
+window.addEventListener('load', function() {
+  setTimeout(function() { _liveSync.start(); }, 2000); // 2s delay after load
+});
 // ═══ STATE ═══
 window._WIKIMAP = {
   "F8C Lightning":"F8C_Lightning","Hammerhead":"Hammerhead","Gladius":"Gladius",
@@ -2134,6 +2437,7 @@ function onActChange(val){selAct=val;if(selShip)generate();}
         var matches=[...html.matchAll(/Alpha\s+([\d.]+)\s+(?:was released|released)\s+(?:LIVE|onto\s+the\s+LIVE)/gi)];
         if(matches.length){
           var ver=matches[0][1];
+          _liveSync._scVer = ver;
           var hp=document.getElementById('hpatch');
           if(hp) hp.textContent='\u25cf '+total+' HULLS \u00b7 PU '+ver+' LIVE';
         }
@@ -2527,6 +2831,7 @@ var _origGenerate = generate;
 generate = function() {
   hideDashboard();
   _origGenerate.apply(this, arguments);
+  if (selShip) setTimeout(function(){ fetchLiveStats(selShip); }, 500);
   var loTab=document.querySelector('[data-t="lo"]');
   if(loTab){loTab.style.background='var(--accent-bg)';setTimeout(function(){loTab.style.background='';},300);}
   updateTargetAnalysis();
@@ -5241,6 +5546,120 @@ function filterShipsBySize(size) {
     sb.style.display='block';
   }
   showDashboard(); // Actually just show search results over dashboard
+}
+
+
+// ── LIVE STATS from Fleetyards ──
+var _fyCache = {}; // per-ship cache
+
+function fetchLiveStats(shipName) {
+  // Hide all live cards while loading
+  ['liveStatsCard','vesselStatsCard','dimensionsCard','fuelCard'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='none';
+  });
+
+  // Check cache first
+  if (_fyCache[shipName]) {
+    _applyLiveStats(_fyCache[shipName]);
+    return;
+  }
+
+  // Build slug from fleetyards erkulIdentifier if we have it, or derive it
+  var def = SHIP_DATA[shipName] || {};
+  var slug = def._fySlug || '';
+
+  // If no slug from sync, try to derive: "Aegis Dynamics" + "Gladius" -> "aegs-gladius"
+  if (!slug) {
+    // Use the _liveSync cache if available
+    if (window._liveSync && window._liveSync._lastShips) {
+      var found = window._liveSync._lastShips.find(function(s){ return s.name === shipName; });
+      if (found) slug = found.slug;
+    }
+  }
+
+  if (!slug) {
+    // Fallback: fetch search
+    fetch('https://api.fleetyards.net/v1/models?q=' + encodeURIComponent(shipName) + '&perPage=3')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var match = (d.items||[]).find(function(s){ return s.name===shipName; });
+        if (match) { slug = match.slug; fetchLiveStatsBySlug(shipName, slug); }
+      })
+      .catch(function(){});
+    return;
+  }
+
+  fetchLiveStatsBySlug(shipName, slug);
+}
+
+function fetchLiveStatsBySlug(shipName, slug) {
+  fetch('https://api.fleetyards.net/v1/models/' + slug)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      _fyCache[shipName] = d;
+      // Also store slug for future calls
+      if (SHIP_DATA[shipName]) SHIP_DATA[shipName]._fySlug = slug;
+      _applyLiveStats(d);
+    })
+    .catch(function(e){ console.log('[FY] stats fetch failed:', e.message); });
+}
+
+function _applyLiveStats(d) {
+  function set(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val !== null && val !== undefined ? val : '—';
+  }
+  function show(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = '';
+  }
+
+  // FLIGHT card
+  if (d.speeds) {
+    set('statAB', d.speeds.scmSpeedBoosted ? Math.round(d.speeds.scmSpeedBoosted) + ' m/s' : '—');
+    set('statPitch', d.speeds.pitchBoosted ? d.speeds.pitchBoosted.toFixed(1) + '°/s' : '—');
+    set('statRoll', d.speeds.rollBoosted ? d.speeds.rollBoosted.toFixed(1) + '°/s' : '—');
+    set('statYaw', d.speeds.yawBoosted ? d.speeds.yawBoosted.toFixed(1) + '°/s' : '—');
+    show('liveStatsCard');
+  }
+
+  // VESSEL card
+  var hasFocus = d.focus;
+  var hasCrew = d.crew && d.crew.max;
+  var hasCargo = d.metrics && d.metrics.cargo !== null;
+  var hasMass = d.metrics && d.metrics.mass;
+  if (hasFocus || hasCrew || hasCargo || hasMass) {
+    set('statFocus', d.focus || '—');
+    var crewMin = d.crew ? d.crew.min : null;
+    var crewMax = d.crew ? d.crew.max : null;
+    set('statCrew', crewMin && crewMax && crewMin !== crewMax ? crewMin + '–' + crewMax : (crewMax || '—'));
+    set('statCargo', d.metrics && d.metrics.cargo ? d.metrics.cargo + ' SCU' : '—');
+    if (d.metrics && d.metrics.mass) {
+      var mass = d.metrics.mass;
+      set('statMass', mass >= 1000000 ? (mass/1000000).toFixed(2)+' Mt' : mass >= 1000 ? Math.round(mass/1000)+' t' : Math.round(mass)+' kg');
+    } else {
+      set('statMass', '—');
+    }
+    show('vesselStatsCard');
+  }
+
+  // DIMENSIONS card
+  if (d.metrics && d.metrics.length) {
+    set('statLen', d.metrics.length + ' m');
+    set('statBeam', d.metrics.beam ? d.metrics.beam + ' m' : '—');
+    set('statHeight', d.metrics.height ? d.metrics.height + ' m' : '—');
+    show('dimensionsCard');
+  }
+
+  // FUEL card
+  var h2Total = 0, qtTotal = 0;
+  if (d.hydrogenFuelTanks) d.hydrogenFuelTanks.forEach(function(t){ h2Total += t.capacity||0; });
+  if (d.quantumFuelTanks) d.quantumFuelTanks.forEach(function(t){ qtTotal += t.capacity||0; });
+  if (h2Total > 0 || qtTotal > 0) {
+    set('statH2', h2Total > 0 ? h2Total.toFixed(1) + ' units' : '—');
+    set('statQT', qtTotal > 0 ? qtTotal.toFixed(2) + ' units' : '—');
+    show('fuelCard');
+  }
 }
 
 </script>
