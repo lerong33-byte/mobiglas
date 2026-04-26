@@ -403,7 +403,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.21</span></div>
+    <div class="nav-logo">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.24</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -556,18 +556,18 @@ option,optgroup{background:var(--bg2)}
       </div>
 
       <div class="pane on" id="pane-lo">
-        <div id="mobiDash" style="flex:1;min-height:0;overflow-y:auto;padding:16px 16px 32px;display:flex;flex-direction:column;gap:12px">
+        <div id="mobiDash" style="flex:1;min-height:0;overflow:hidden;padding:8px 10px;display:flex;flex-direction:column;gap:6px">
   <div style="padding-bottom:10px;border-bottom:1px solid var(--border)">
     <div style="font-size:18px;font-weight:700;font-family:var(--fhud);letter-spacing:2px;color:var(--text)">&#9652; MOBIGLAS</div>
     <div style="font-size:10px;color:var(--t3);font-family:var(--fmono);margin-top:2px">STAR CITIZEN LOADOUT CONFIGURATOR</div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--accent)" id="dKpiHulls">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">HULLS</div></div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--green)" id="dKpiGuns">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">WEAPONS</div></div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--warn)" id="dKpiMfr">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">MFR</div></div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--cyan)" id="dKpiSaved">0</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">SAVED</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;cursor:pointer;transition:border-color .15s" onclick="document.getElementById('sSearch').focus();buildSrbox('');" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--accent)" id="dKpiHulls">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">HULLS</div><div style="font-size:8px;color:var(--accent);font-family:var(--fmono);margin-top:2px;opacity:.7">BROWSE ›</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;cursor:pointer;transition:border-color .15s" onclick="showTab('wp')" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--green)" id="dKpiGuns">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">WEAPONS</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;cursor:pointer;transition:border-color .15s" onclick="document.getElementById('dMfrBars').scrollIntoView({behavior:'smooth'})" onmouseover="this.style.borderColor='var(--warn)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--warn)" id="dKpiMfr">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">MFR</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;cursor:pointer;transition:border-color .15s" onclick="showTab('sv')" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--cyan)" id="dKpiSaved">0</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">SAVED</div></div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0">
     <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px"><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">BY MANUFACTURER</div><div id="dMfrBars" style="display:flex;flex-direction:column;gap:6px"></div></div>
     <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px"><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">BY SIZE CLASS</div><div id="dSizeBars" style="display:flex;flex-direction:column;gap:8px"></div></div>
   </div>
@@ -4687,7 +4687,7 @@ function renderDashboard() {
     mfrEl.innerHTML=sorted.map(function(m){
       var pct=Math.round((mfrC[m]/max)*100);
       var short=m.replace('Aerospace','').replace('Interplanetary','').replace('Jumpworks','').replace('Industries','').replace('Dynamics','').replace('Systems','').trim();
-      return '<div style="display:flex;align-items:center;gap:6px"><div style="font-size:9px;font-family:var(--fmono);color:var(--t2);width:70px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+short+'</div><div style="flex:1;background:var(--bg4);border-radius:2px;height:5px"><div style="width:'+pct+'%;height:100%;background:var(--accent);border-radius:2px"></div></div><div style="font-size:9px;font-family:var(--fmono);color:var(--t3);width:16px;text-align:right">'+mfrC[m]+'</div></div>';
+      return '<div onclick="filterShipsByMfr(\'' + m.replace(/'/g,"\\\\'") + '\')" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 4px;border-radius:4px;transition:background .1s" onmouseover="this.style.background=\'var(--bg4)\'" onmouseout="this.style.background=\'transparent\'"><div style="font-size:9px;font-family:var(--fmono);color:var(--t2);width:70px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+short+'</div><div style="flex:1;background:var(--bg4);border-radius:2px;height:5px"><div style="width:'+pct+'%;height:100%;background:var(--accent);border-radius:2px"></div></div><div style="font-size:9px;font-family:var(--fmono);color:var(--accent);width:16px;text-align:right">'+mfrC[m]+'</div></div>';
     }).join('');
   }
 
@@ -4700,7 +4700,7 @@ function renderDashboard() {
     var sT=Object.values(sC).reduce(function(a,b){return a+b;},0)||1;
     sizeEl.innerHTML=Object.keys(sC).map(function(sz){
       var pct=Math.round((sC[sz]/sT)*100);
-      return '<div><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:9px;font-family:var(--fmono);color:var(--t2)">'+sz+' &middot; '+sL[sz]+'</span><span style="font-size:9px;font-family:var(--fmono);color:var(--t3)">'+sC[sz]+'</span></div><div style="background:var(--bg4);border-radius:2px;height:6px"><div style="width:'+pct+'%;height:100%;background:'+sCol[sz]+';border-radius:2px"></div></div></div>';
+      return '<div onclick="filterShipsBySize(\'' + sz + '\')" style="cursor:pointer;padding:2px 4px;border-radius:4px;transition:background .1s" onmouseover="this.style.background=\'var(--bg4)\'" onmouseout="this.style.background=\'transparent\'"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:9px;font-family:var(--fmono);color:var(--t2)">'+sz+' &middot; '+sL[sz]+'</span><span style="font-size:9px;font-family:var(--fmono);color:'+sCol[sz]+'">'+sC[sz]+'</span></div><div style="background:var(--bg4);border-radius:2px;height:6px"><div style="width:'+pct+'%;height:100%;background:'+sCol[sz]+';border-radius:2px"></div></div></div>';
     }).join('');
   }
 
@@ -5134,6 +5134,59 @@ function onRackChange(sel) {
     });
   });
 })();
+
+
+function filterShipsByMfr(mfr) {
+  hideDashboard();
+  // Focus ship search and show ships from that manufacturer
+  var si = document.getElementById('sSearch');
+  if (si) { si.value = mfr; var clr = document.getElementById('sSearchClear'); if(clr)clr.style.display='block'; }
+  buildSrbox(mfr.toLowerCase());
+  if (si) si.focus();
+}
+
+function filterShipsBySize(size) {
+  hideDashboard();
+  // Filter quick launch by size and show search
+  var si = document.getElementById('sSearch');
+  var sizeNames = {XS:'Extra Small',S:'Small',M:'Medium',L:'Large',XL:'Capital'};
+  if (si) { si.value = ''; var clr = document.getElementById('sSearchClear'); if(clr)clr.style.display='none'; }
+  // Filter the ship dropdown and show results
+  var sSel = document.getElementById('sSel');
+  if (sSel) {
+    while(sSel.options.length>1) sSel.remove(1);
+    Object.keys(SHIPS).sort().forEach(function(mfr){
+      if(!SHIPS[mfr])return;
+      var ships=SHIPS[mfr].filter(function(s){return SHIP_DATA[s]&&SHIP_DATA[s].size===size;});
+      if(!ships.length)return;
+      var og=document.createElement('optgroup');og.label=mfr;
+      ships.sort().forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;og.appendChild(o);});
+      sSel.appendChild(og);
+    });
+  }
+  // Show search box with filtered results
+  var sb = document.getElementById('srbox');
+  if(sb){
+    var byMfr={};
+    Object.keys(SHIPS).sort().forEach(function(mfr){
+      if(!SHIPS[mfr])return;
+      SHIPS[mfr].forEach(function(s){
+        if(SHIP_DATA[s]&&SHIP_DATA[s].size===size){if(!byMfr[mfr])byMfr[mfr]=[];byMfr[mfr].push(s);}
+      });
+    });
+    var html='';
+    Object.keys(byMfr).sort().forEach(function(mfr){
+      html+='<div style="padding:3px 10px 2px;font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);background:var(--bg3);border-bottom:1px solid var(--border)">'+mfr+'</div>';
+      byMfr[mfr].forEach(function(s){html+='<div class="sri" data-n="'+encodeURIComponent(s)+'">'+s+'</div>';});
+    });
+    sb.innerHTML=html||'<div style="padding:8px;color:var(--t3)">No ships found</div>';
+    Array.prototype.forEach.call(sb.querySelectorAll('.sri'),function(el){
+      el.onmousedown=function(e){e.preventDefault();pick(decodeURIComponent(this.getAttribute('data-n')));sb.style.display='none';};
+    });
+    sb.style.display='block';
+  }
+  showDashboard(); // Actually just show search results over dashboard
+}
 
 </script>
 
