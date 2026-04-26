@@ -11,16 +11,16 @@
 /* ── TOKENS ── */
 button{background:transparent;border:none;cursor:pointer;font-family:inherit;outline:none}
 :root{
-  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2230;--bg4:#21283a;
-  --border:#2a3648;--b2:#344260;
-  --text:#e6edf3;--t2:#8b97a8;--t3:#586171;
-  --accent:#3b82f6;--accent-bg:rgba(59,130,246,.12);--accent-border:rgba(59,130,246,.3);
-  --green:#22c55e;--green-bg:rgba(34,197,94,.1);--green-border:rgba(34,197,94,.3);
-  --warn:#f59e0b;--warn-bg:rgba(245,158,11,.1);--warn-border:rgba(245,158,11,.3);
-  --red:#ef4444;--red-bg:rgba(239,68,68,.1);--red-border:rgba(239,68,68,.3);
-  --cyan:#22d3ee;--purple:#a78bfa;--muted:#586171;
+  --bg:#0c0e12;--bg2:#12151c;--bg3:#161b24;--bg4:#1c2535;
+  --border:#222e40;--b2:#2a3850;
+  --text:#c0cee0;--t2:#5878a0;--t3:#2e3e52;
+  --accent:#7ab0e8;--accent-bg:rgba(122,176,232,.12);--accent-border:rgba(122,176,232,.3);
+  --green:#38d282;--green-bg:rgba(56,210,130,.1);--green-border:rgba(56,210,130,.3);
+  --warn:#e8a840;--warn-bg:rgba(232,168,64,.1);--warn-border:rgba(232,168,64,.3);
+  --red:#e85060;--red-bg:rgba(232,80,96,.1);--red-border:rgba(232,80,96,.3);
+  --cyan:#50c8e0;--purple:#9080d8;--muted:#2e3e52;--blue:#7ab0e8;
   --fhud:'Inter',sans-serif;--fmono:'JetBrains Mono',monospace;
-  --r:10px;--r-sm:7px;--r-lg:14px;
+  --r:8px;--r-sm:5px;--r-lg:12px
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--fhud)}
@@ -61,7 +61,7 @@ option,optgroup{background:var(--bg2)}
 .body{display:flex;flex:1;min-height:0;overflow:hidden}
 
 /* ── LEFT PANEL ── */
-.lp{width:18%;min-width:200px;max-width:280px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg2);overflow:hidden}
+.lp{width:26%;min-width:240px;max-width:320px;min-width:240px;max-width:320px;min-width:220px;max-width:300px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg2);overflow:hidden}
 
 /* Ship image */
 .ship-img-wrap{height:150px;background:var(--bg3);flex-shrink:0;border-bottom:1px solid var(--border);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -191,7 +191,7 @@ option,optgroup{background:var(--bg2)}
 .sz-s1{background:var(--bg4);color:var(--t2);border:1px solid var(--border)}
 .slot-lbl{font-size:11px;color:var(--t2)}
 .slot-note{font-size:11px;color:var(--t3)}
-.slot-sel{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 8px;font-size:12px;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s}
+.slot-sel{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 8px;font-size:12px;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s}.slot-sel[data-gunidx]{font-size:11px;padding:3px 6px}
 .slot-sel:focus{border-color:var(--accent)}
 .slot-sel.mod{border-color:var(--warn)!important;background:rgba(245,158,11,.05)!important}
 .slot-info{padding:4px 10px;border-top:1px solid var(--border);font-family:var(--fmono);font-size:10px;line-height:1.4}
@@ -272,7 +272,7 @@ option,optgroup{background:var(--bg2)}
 .loc-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:13px;color:var(--text)}
 
 /* ── RIGHT PANEL ── */
-.rp{width:28%;min-width:260px;max-width:380px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid var(--border);background:var(--bg2);overflow:hidden}
+.rp{width:22%;min-width:220px;max-width:280px;flex-shrink:0;display:flex;flex-direction:column;border-left:1px solid var(--border);background:var(--bg2);overflow:hidden}
 .rp-scroll{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:0}
 
 /* Target analysis */
@@ -418,8 +418,8 @@ option,optgroup{background:var(--bg2)}
   <div class="body">
 
     <!-- LEFT: ship dashboard -->
-    <aside class="lp">
-      <div class="ship-img-wrap" style="height:150px">
+        <aside class="lp">
+<div class="ship-img-wrap" style="height:155px">
         <span class="ship-img-placeholder" id="shipPh">Select a ship</span>
         <img id="rpShipImg" alt=""/>
         <div class="ship-img-overlay">
@@ -443,7 +443,8 @@ option,optgroup{background:var(--bg2)}
         </div>
       </div>
 
-      <div class="lp-scroll">
+      
+<div class="lp-scroll">
 
         <div class="lp-card" id="pwrCard" style="display:none">
           <div class="lp-card-hd">
@@ -516,27 +517,59 @@ option,optgroup{background:var(--bg2)}
         </button>
       </div>
       <!-- Saved loadouts in left panel -->
-      <div style="border-top:1px solid var(--border);padding:10px 12px;flex-shrink:0;max-height:200px;overflow-y:auto">
-        <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:8px">SAVED LOADOUTS</div>
-        <div class="sv-list" id="svList">
-          <div class="sv-empty">No saved loadouts yet</div>
+
+      <div style="border-top:1px solid var(--border);flex-shrink:0">
+        <div style="padding:6px 10px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono)">SAVED LOADOUTS</span>
+          <span style="font-size:9px;color:var(--t3);font-family:var(--fmono)" id="svCount"></span>
         </div>
+        <div class="sv-list" id="svList" style="max-height:160px;overflow-y:auto;padding:0 8px 8px"></div>
+      </div>
+    </aside
+      </div>
+      <div style="border-top:1px solid var(--border);padding:8px 10px;flex-shrink:0">
+        <div style="font-size:9px;letter-spacing:1.5px;color:var(--accent);font-family:var(--fmono);margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:6px">⊕ TARGET SHIP</div>
+        <div style="position:relative;display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 8px;gap:6px;margin-bottom:4px">
+            <span style="color:var(--t3);font-size:12px">&#9906;</span>
+            <input id="tgtSearch" type="text" placeholder="Search target…" autocomplete="off"
+              oninput="onTgtSearch(this.value)"
+              onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
+              onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"
+              style="flex:1;background:none;border:none;outline:none;font-size:11px;color:var(--text);padding:5px 0;font-family:var(--fhud)"/>
+            <span id="tgtSearchClear" onclick="clearTgtSearch()" style="display:none;cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none" title="Clear">&#10005;</span>
+            <div id="tgtDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:200;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.5)"></div>
+          </div>
+          
+        <div id="tgtImgWrap" style="position:relative;height:140px;background:var(--bg3);border-radius:var(--r);overflow:hidden;margin-bottom:6px;border:1px solid var(--border)">
+          <img id="tgtImg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:none" alt=""/>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:12px;font-family:var(--fmono)" id="tgtImgPh">Select a target</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:11px;font-family:var(--fmono);color:#fff;letter-spacing:.5px" id="tgtImgLabel"></div>
+        </div>
+
+        
+        <div id="verdictWrap" style="display:none;margin-top:6px"></div>
+      </div>
+      <div style="border-top:1px solid var(--border);flex-shrink:0">
+        <div style="padding:6px 10px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono)">SAVED LOADOUTS</span>
+          <span style="font-size:9px;color:var(--t3);font-family:var(--fmono)" id="svCount"></span>
+        </div>
+        <div class="sv-list" id="svList" style="max-height:160px;overflow-y:auto;padding:0 8px 8px"></div>
+      
       </div>
     </aside>
+
 
     <!-- CENTER: loadout builder + tabs -->
     <div class="cp">
       <div class="tabs">
         <button class="tab on" data-t="lo" onclick="showTab('lo',this)">LOADOUT BUILDER</button>
+        <button class="tab" data-t="ai" onclick="showTab('ai',this)">AI ADVISOR</button>
         <button class="tab" data-t="wp" onclick="showTab('wp',this)">WEAPONS DB</button>
         <button class="tab" data-t="lc" onclick="showTab('lc',this)">BUY LOCATIONS</button>
         <button class="tab" data-t="pn" onclick="showTab('pn',this);loadPatchNotes()">PATCH NOTES</button>
         <button class="tab" data-t="cmp" onclick="showTab('cmp',this);populateCompareSelects();if(selShip){document.getElementById('cmpSelA').value=selShip;renderComparison();}">⬡ COMPARE</button>
-        <button class="tab" onclick="toggleFeedback()" style="margin-left:auto;color:var(--accent);border-left:1px solid var(--border)">✦ FEEDBACK</button>
-        <div id="verdictWrap" style="display:none;align-items:center;padding:0 12px;border-left:1px solid var(--border)"></div>
-        <button class="tab" id="quickSaveBtn" onclick="quickSave()" style="color:var(--green);border-left:1px solid var(--border)">&#9672; SAVE</button>
       </div>
-
 
       <div class="pane on" id="pane-lo">
         <div id="mobiDash" style="flex:1;min-height:0;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px">
@@ -545,50 +578,43 @@ option,optgroup{background:var(--bg2)}
       <div style="font-size:18px;font-weight:700;font-family:var(--fhud);letter-spacing:2px;color:var(--text)">&#9652; MOBIGLAS</div>
       <div style="font-size:10px;color:var(--t3);font-family:var(--fmono);margin-top:2px">STAR CITIZEN LOADOUT CONFIGURATOR</div>
     </div>
-    <div style="text-align:right">
-      <div style="font-size:10px;font-family:var(--fmono);color:var(--accent)">&#9679; LIVE 4.7.1</div>
-      <div id="dashHullCount" style="font-size:10px;font-family:var(--fmono);color:var(--t3);margin-top:2px">-- HULLS</div>
-    </div>
+    <div id="dashHullCount" style="font-size:10px;font-family:var(--fmono);color:var(--accent)">-- HULLS</div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center">
-      <div style="font-size:24px;font-weight:700;font-family:var(--fmono);color:var(--accent)" id="dKpiHulls">--</div>
-      <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">HULLS</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center">
-      <div style="font-size:24px;font-weight:700;font-family:var(--fmono);color:var(--green)" id="dKpiGuns">--</div>
-      <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">WEAPONS</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center">
-      <div style="font-size:24px;font-weight:700;font-family:var(--fmono);color:var(--warn)" id="dKpiMfr">--</div>
-      <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">MFR</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center">
-      <div style="font-size:24px;font-weight:700;font-family:var(--fmono);color:var(--cyan)" id="dKpiSaved">0</div>
-      <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">SAVED</div>
-    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;font-family:var(--fmono);color:var(--accent)" id="dKpiHulls">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">HULLS</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;font-family:var(--fmono);color:var(--green)" id="dKpiGuns">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">WEAPONS</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;font-family:var(--fmono);color:var(--warn)" id="dKpiMfr">--</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">MFR</div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;font-family:var(--fmono);color:var(--cyan)" id="dKpiSaved">0</div><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-top:3px">SAVED</div></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-      <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">BY MANUFACTURER</div>
-      <div id="dMfrBars" style="display:flex;flex-direction:column;gap:6px"></div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-      <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">BY SIZE CLASS</div>
-      <div id="dSizeBars" style="display:flex;flex-direction:column;gap:8px"></div>
-    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px"><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">BY MANUFACTURER</div><div id="dMfrBars" style="display:flex;flex-direction:column;gap:6px"></div></div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px"><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">BY SIZE CLASS</div><div id="dSizeBars" style="display:flex;flex-direction:column;gap:8px"></div></div>
   </div>
-  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-    <div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">QUICK LAUNCH</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="dQuickLaunch"></div>
-  </div>
+  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px"><div style="font-size:9px;letter-spacing:1.5px;color:var(--t3);font-family:var(--fmono);margin-bottom:10px">QUICK LAUNCH</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="dQuickLaunch"></div></div>
   <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--r);padding:14px;text-align:center">
     <div style="font-size:12px;font-family:var(--fmono);color:var(--accent);margin-bottom:8px;letter-spacing:1px">&#9672; FILTER BY ROLE</div>
     <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap" id="dRoleFilters"></div>
     <div style="font-size:11px;color:var(--t3);margin-top:10px">Search or click a ship above to configure your loadout</div>
   </div>
 </div>
-<div id="loContent" style="flex:1;min-height:0;overflow-y:auto;padding:8px 12px;display:none"></div>
+        <div id="loContent" style="flex:1;overflow-y:auto;padding:16px"></div>
+      </div>
+
+      <div class="pane" id="pane-ai">
+        <div class="ai-banner" id="aiBanner">
+          <span>&#9888; API KEY:</span>
+          <input type="password" id="apiKeyInput" placeholder="sk-ant-..."/>
+          <button onclick="saveKey()">SAVE</button>
+        </div>
+        <div class="ai-active" id="aiActive">&#10003; AI ONLINE &mdash; Ask anything about ships, builds, meta</div>
+        <div class="msgs" id="aiMsgs">
+          <div class="msg"><div class="av a">AI</div><div class="bub">Enter your Anthropic API key above to enable AI build advice.</div></div>
+        </div>
+        <div class="typing-row" id="aiTyping"><div class="td"></div><div class="td"></div><div class="td"></div><span style="font-size:11px;color:var(--t3);margin-left:4px">Thinking&hellip;</span></div>
+        <div class="inp-row">
+          <input class="chat-inp" id="aiInput" placeholder="Ask about builds, meta, ship comparisons&hellip;" onkeydown="if(event.key==='Enter')sendAI()"/>
+          <button class="sbtn" id="aiSend" onclick="sendAI()">SEND</button>
+        </div>
       </div>
 
       <div class="pane" id="pane-wp">
@@ -597,15 +623,6 @@ option,optgroup{background:var(--bg2)}
       </div>
 
       <div class="pane" id="pane-lc">
-        <div style="padding:12px 16px 0">
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button onclick="filterLocs(null,this)" class="loc-filter-btn active" style="background:var(--accent);border:1px solid var(--accent);border-radius:20px;padding:4px 12px;font-size:10px;font-family:var(--fmono);color:#fff;cursor:pointer">ALL</button>
-            <button onclick="filterLocs('Stanton',this)" class="loc-filter-btn" style="background:var(--bg4);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:10px;font-family:var(--fmono);color:var(--t2);cursor:pointer">STANTON</button>
-            <button onclick="filterLocs('Pyro',this)" class="loc-filter-btn" style="background:var(--bg4);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:10px;font-family:var(--fmono);color:var(--t2);cursor:pointer">PYRO</button>
-            <button onclick="filterLocs('weapons',this)" class="loc-filter-btn" style="background:var(--bg4);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:10px;font-family:var(--fmono);color:var(--t2);cursor:pointer">WEAPONS</button>
-            <button onclick="filterLocs('components',this)" class="loc-filter-btn" style="background:var(--bg4);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:10px;font-family:var(--fmono);color:var(--t2);cursor:pointer">COMPONENTS</button>
-          </div>
-        </div>
         <div id="locGrid"></div>
       </div>
 
@@ -633,58 +650,26 @@ option,optgroup{background:var(--bg2)}
           </div>
           <div id="cmpTable" style="color:var(--t3);font-size:13px;text-align:center;padding:20px 0;font-family:var(--fmono)">Select two ships to compare</div>
         </div>
-
-      
       </div>
     </div>
 
     <!-- RIGHT: target analysis + saved loadouts -->
-    <aside class="rp">
+    
+<aside class="rp">
       <div class="rp-scroll">
-
-        <!-- Target ship image -->
-        <div id="tgtImgWrap" style="display:none;position:relative;height:120px;background:var(--bg3);border-radius:var(--r);overflow:hidden;margin-bottom:4px;border:1px solid var(--border)">
-          <img id="tgtImg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:none" alt=""/>
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:12px;font-family:var(--fmono)" id="tgtImgPh">Select a target</div>
-          <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:11px;font-family:var(--fmono);color:#fff;letter-spacing:.5px" id="tgtImgLabel"></div>
-        </div>
-
         <div class="tgt-panel-inner" id="tgtPanel">
           <div class="tgt-title">TARGET ANALYSIS</div>
           <select id="tgtSel" class="tgt-sel-dd" style="display:none">
             <option value="">— Select target —</option>
           </select>
-          <div style="position:relative;display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 8px;gap:6px;margin-bottom:4px">
-            <span style="color:var(--t3);font-size:12px">&#9906;</span>
-            <input id="tgtSearch" type="text" placeholder="Search target…" autocomplete="off"
-              oninput="onTgtSearch(this.value)"
-              onfocus="buildTgtDropdown(this.value.trim().toLowerCase())"
-              onblur="setTimeout(function(){var dd=document.getElementById('tgtDropdown');if(dd)dd.style.display='none';},150)"
-              style="flex:1;background:none;border:none;outline:none;font-size:11px;color:var(--text);padding:5px 0;font-family:var(--fhud)"/>
-            <span id="tgtSearchClear" onclick="clearTgtSearch()" style="display:none;cursor:pointer;color:var(--t3);font-size:14px;line-height:1;user-select:none" title="Clear">&#10005;</span>
-            <div id="tgtDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);z-index:200;max-height:300px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.5)"></div>
-          </div>
           <div id="tgtSelected" style="display:none!important">
             <span id="tgtSelectedName"></span>
             <button onclick="clearTarget()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:15px;padding:0;line-height:1">&#215;</button>
           </div>
-          <div id="tgtContent" style="text-align:center;padding:8px 0;font-style:italic">Select a target to analyse</div>
-        </div>
-
-        <!-- svName hidden for quickSave -->
-        <input class="sv-input" id="svName" style="display:none" maxlength="32"/>
-
-        <!-- Hidden legacy elements the JS expects -->
-        <div style="display:none">
-          <div id="wikiSyncSec">
-            <button id="syncBtn" onclick="syncFromWiki()"></button>
-            <button id="syncLoadoutBtn" onclick="syncStockLoadout()"></button>
-            <span id="syncStatus"></span>
+          <div id="tgtContent" style="font-size:11px">
+            <div style="font-size:12px;color:var(--t3);text-align:center;padding:20px 0;font-style:italic;font-family:var(--fmono)">Select a target to analyse</div>
           </div>
-          <div id="pipGroupsWrap"></div>
-          <div id="actList"></div>
         </div>
-
       </div>
     </aside>
 
@@ -972,7 +957,7 @@ function S(name,mfr,role,size,crew,scm,csz,slots,missiles,comps,tips){
   if(!SHIPS[mfr])SHIPS[mfr]=[];SHIPS[mfr].push(name);
 }
 function W(lbl,sz,defId,note,fixed){return{lbl:lbl,type:"weapon",sz:sz,default:defId,note:note||"",fixed:!!fixed};}
-function T(lbl,sz,defId,note){return{lbl:lbl,type:"turret",sz:sz,default:defId,note:note||""};}
+function T(lbl,sz,defId,note,count){return{lbl:lbl,type:"turret",sz:sz,default:defId,note:note||"",count:count||1};}
 function M(lbl,sz,count,defId){return{lbl:lbl,sz:sz,count:count,default:defId};}
 
 // ── AEGIS ──
@@ -1059,13 +1044,13 @@ S("Vanguard Hoplite","Aegis Dynamics","Transport","M",2,155,"S2",
   ["Hoplite = Vanguard dropship — carries 5 Marines","Rear module is passenger/boarding compartment","Same weapon layout as Warden"]);
 
 S("Hammerhead","Aegis Dynamics","Gunship","L",9,130,"S3",
-  [T("S4 Turret 1 (4x CF-447)",4,"cf447","4x CF-447 Rhino — wiki verified"),T("S4 Turret 2 (4x CF-447)",4,"cf447","4x CF-447 Rhino"),T("S4 Turret 3 (4x CF-447)",4,"cf447","4x CF-447 Rhino"),T("S4 Turret 4 (4x CF-447)",4,"cf447","4x CF-447 Rhino"),T("S4 Turret 5 (4x CF-447)",4,"cf447","4x CF-447 Rhino"),T("S4 Turret 6 (4x CF-447)",4,"cf447","4x CF-447 Rhino")],
+  [T("S4 Turret 1",4,"cf447","4x CF-447 Rhino — wiki verified",4),T("S4 Turret 2",4,"cf447","4x CF-447 Rhino",4),T("S4 Turret 3",4,"cf447","4x CF-447 Rhino",4),T("S4 Turret 4",4,"cf447","4x CF-447 Rhino",4),T("S4 Turret 5",4,"cf447","4x CF-447 Rhino",4),T("S4 Turret 6",4,"cf447","4x CF-447 Rhino",4)],
   [M("MSD-543 Rack 1",5,4,"arr3"),M("MSD-543 Rack 2",5,4,"arr3"),M("MSD-543 Rack 3",5,4,"arr3"),M("MSD-543 Rack 4",5,4,"arr3"),M("MSD-543 Rack 5",5,4,"tbolt3"),M("MSD-543 Rack 6",5,4,"tbolt3"),M("MSD-543 Rack 7",5,4,"tbolt3"),M("MSD-543 Rack 8",5,4,"tbolt3")],
   {pp:"Maelstrom S3",sg:"FullStop S3",cooler:"Blizzard S3",qd:"Crossfield S3",radar:"Capston S1",counts:{pp:2,sg:3,cooler:2,qd:1}},
   ["6 MANNED turrets each with FOUR S4 CF-447 Rhinos = 24 guns total — wiki verified","8x MSD-543 racks: 4x Arrester III + 4x Thunderbolt III = 32x S3 missiles","7 crew minimum: pilot + 6 turret gunners"])
 
 S("Redeemer","Aegis Dynamics","Gunship","L",5,130,"S2",
-  [T("S4 Wing (Port, 2x)",4,"ad4b","2x AD4B per turret"),T("S4 Wing (Stbd, 2x)",4,"ad4b","2x AD4B"),T("S3 Chin (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Chin (Stbd, 2x)",3,"cf337","2x CF-337")],
+  [T("S4 Wing (Port)",4,"ad4b","2x AD4B per turret",2),T("S4 Wing (Stbd)",4,"ad4b","2x AD4B",2),T("S3 Chin (Port)",3,"cf337","2x CF-337",2),T("S3 Chin (Stbd)",3,"cf337","2x CF-337",2)],
   [M("S2 Pod (Port, x8)",2,8,"ignite2"),M("S2 Pod (Stbd, x8)",2,8,"ignite2")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["2x S4 wing + 2x S3 chin turrets + 16x S2 missiles","Carries 8 Marines — true gunship/dropship","Upgrade wing turrets to Revenant Gatling"]);
@@ -1081,7 +1066,7 @@ S("Nautilus","Aegis Dynamics","Support","L",4,100,"S3",
   ["Deploys space mines for area denial","Stealth approach recommended when laying fields","Defensive asset — not a frontline ship"]);
 
 S("Retaliator","Aegis Dynamics","Bomber","L",7,120,"S3",
-  [T("S3 Turret (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Turret (Stbd, 2x)",3,"cf337","2x CF-337"),T("S3 Turret (Top, 2x)",3,"cf337","2x CF-337")],
+  [T("S3 Turret (Port)",3,"cf337","2x CF-337",2),T("S3 Turret (Stbd)",3,"cf337","2x CF-337",2),T("S3 Turret (Top)",3,"cf337","2x CF-337",2)],
   [M("S9 Bay 1",9,1,"s9torp"),M("S9 Bay 2",9,1,"s9torp"),M("S9 Bay 3",9,1,"s9torp"),M("S9 Bay 4",9,1,"s9torp"),M("S9 Bay 5",9,1,"s9torp"),M("S9 Bay 6",9,1,"s9torp"),M("S9 Bay 7",9,1,"s9torp"),M("S9 Bay 8",9,1,"s9torp")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["8x S9 torpedoes — largest torpedo payload available","Needs fighter escort — pure bomber role","Turrets defensive only; torps are the weapon"]);
@@ -1127,7 +1112,7 @@ S("F8C Lightning","Anvil Aerospace","Fighter","M",1,210,"S2",
   [W("S3 Chin (Port)",2,"cf227","CF-227 Badger (S2 on S3 gimbal)"),W("S3 Chin (Stbd)",2,"cf227","CF-227 Badger (S2 on S3 gimbal)"),
    W("S3 Wing (Port)",3,"tar3","Tarantula GT-870 Mk3 (fixed)"),W("S3 Wing (Stbd)",3,"tar3","Tarantula GT-870 Mk3 (fixed)"),
    W("S2 Under-wing (Port)",2,"cf227","CF-227 Badger (gimbal)"),W("S2 Under-wing (Stbd)",2,"cf227","CF-227 Badger (gimbal)"),
-   T("Top Turret (2x S2)",2,"cf227","2x CF-227 Badger")],
+   T("Top Turret",2,"cf227","2x CF-227 Badger",2)],
   [M("S3 Rack (Port)",2,4,"ignite2"),M("S3 Rack (Stbd)",2,4,"ignite2")],
   {pp:"Regulus S2",sg:"Palisade S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["NO S5 — 2x S3 chin gimbal (S2 guns) + 2x S3 wing fixed + 2x S2 under-wing gimbal + top turret 2x S2","Wing mounts are fixed S3 — cannot gimbal","Racks hold 4x S2 each (8 total Ignite II) — Military exclusive Concierge/SQ42 reward"]);
@@ -1151,7 +1136,7 @@ S("Gladiator","Anvil Aerospace","Bomber","M",2,170,"S2",
   ["Torpedo bomber — 8x S3 ordnance bays","Tail turret (gunner) provides rear defense","Fast attack runs — don't linger over target"]);
 
 S("Carrack","Anvil Aerospace","Exploration","XL",6,110,"S3",
-  [T("S4 Top (Port, 2x)",4,"ad4b","2x AD4B per turret"),T("S4 Top (Stbd, 2x)",4,"ad4b","2x AD4B per turret"),W("S3 Bottom (Port)",3,"cf337","CF-337 Panther"),W("S3 Bottom (Stbd)",3,"cf337","CF-337 Panther")],
+  [T("S4 Top (Port)",4,"ad4b","2x AD4B per turret",2),T("S4 Top (Stbd)",4,"ad4b","2x AD4B per turret",2),W("S3 Bottom (Port)",3,"cf337","CF-337 Panther"),W("S3 Bottom (Stbd)",3,"cf337","CF-337 Panther")],
   [],{pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Built-in Pisces C8X snub — scout without risking Carrack","Upgrade QD to Atlas S3 — best quantum range in game","On-board med bay, repair drones, sleeping berths"]);
 
@@ -1161,7 +1146,7 @@ S("Terrapin","Anvil Aerospace","Exploration","S",2,150,"S2",
   ["Highest shield HP to size ratio — built to survive","Exceptional sensor suite for scanning","Upgrade Atlas S2 QD for deep exploration"]);
 
 S("Valkyrie","Anvil Aerospace","Transport","L",3,130,"S2",
-  [T("S3 Nose (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Nose (Stbd, 2x)",3,"cf337","2x CF-337"),T("S2 Door (Port)",2,"cf227","CF-227 Badger"),T("S2 Door (Stbd)",2,"cf227","CF-227 Badger"),T("S2 Ramp Turret",2,"cf227","CF-227 Badger")],
+  [T("S3 Nose (Port)",3,"cf337","2x CF-337",2),T("S3 Nose (Stbd)",3,"cf337","2x CF-337",2),T("S2 Door (Port)",2,"cf227","CF-227 Badger"),T("S2 Door (Stbd)",2,"cf227","CF-227 Badger"),T("S2 Ramp Turret",2,"cf227","CF-227 Badger")],
   [M("S2 Rack (Port, x8)",2,8,"ignite2"),M("S2 Rack (Stbd, x8)",2,8,"ignite2")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Carries 20 Marines — premier assault dropship","Nose forward, doors out, ramp fires on landing","Upgrade shields — large target on landing approach"]);
@@ -1172,7 +1157,7 @@ S("Pisces C8X","Anvil Aerospace","Fighter","XS",1,155,"S1",
   ["Snub fighter — carried in Carrack and other ships","2x S1 guns — upgrade to NN-13 for best punch","Best used as scout, not primary combat"]);
 
 S("Paladin","Anvil Aerospace","Gunship","M",3,165,"S2",
-  [T("Main Rail Turret (4x S5)",5,"att5","4x Attrition-5 (rail-mounted, pilot/gunner)"),T("Flank Turret Port (2x S3)",3,"cf337","2x CF-337 Panther"),T("Flank Turret Stbd (2x S3)",3,"cf337","2x CF-337 Panther")],
+  [T("Main Rail Turret",5,"att5","4x Attrition-5 (rail-mounted, pilot/gunner)",4),T("Flank Turret Port",3,"cf337","2x CF-337 Panther",2),T("Flank Turret Stbd",3,"cf337","2x CF-337 Panther",2)],
   [M("S3 Rack x6",3,6,"arr3")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Main turret is rail-mounted — slides top to bottom like Scorpius, carries 4x S5","2x dual S3 flank turrets cover port/starboard arcs","6x missile racks — heavy ordnance platform"]);
@@ -1247,17 +1232,17 @@ S("Spirit A1","Crusader Industries","Bomber","M",2,155,"S2",
   ["S5 bomb bays for ground target strikes","Release bombs at speed then break hard","Treat as pure bomber — not a dogfighter"]);
 
 S("Hercules C2","Crusader Industries","Cargo","L",2,110,"S3",
-  [T("S3 Top (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Top (Stbd, 2x)",3,"cf337","2x CF-337")],
+  [T("S3 Top (Port)",3,"cf337","2x CF-337",2),T("S3 Top (Stbd)",3,"cf337","2x CF-337",2)],
   [],{pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["696 SCU — military-grade hull","Always fly with escort in Pyro","Slow SCM — big target"]);
 
 S("Hercules M2","Crusader Industries","Cargo","L",3,115,"S3",
-  [T("S5 Top (Port, 2x)",5,"ad5b","2x AD5B per turret"),T("S3 Belly (2x)",3,"cf337","2x CF-337")],
+  [T("S5 Top (Port)",5,"ad5b","2x AD5B per turret",2),T("S3 Belly",3,"cf337","2x CF-337",2)],
   [],{pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["M2 has S5 top turrets — much more firepower than C2","522 SCU cargo + well armed","Can fight off most pirate attacks"]);
 
 S("Hercules A2","Crusader Industries","Bomber","L",4,105,"S3",
-  [T("S5 Top (Port, 2x)",5,"ad5b","2x AD5B per turret"),T("S3 Belly (2x)",3,"cf337","2x CF-337")],
+  [T("S5 Top (Port)",5,"ad5b","2x AD5B per turret",2),T("S3 Belly",3,"cf337","2x CF-337",2)],
   [M("S8 Bomb Bay (Port, x2)",8,2,"s9torp"),M("S8 Bomb Bay (Stbd, x2)",8,2,"s9torp")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["S8 Titan bombs — destroys planetary installations","Org-level asset — 4 crew minimum","Highest total damage output ship in game"]);
@@ -1306,7 +1291,7 @@ S("Corsair","Drake Interplanetary","Exploration","L",4,155,"S2",
   ["2x S4 nose fixed + 2x S3 wing + 2x S2 top turret","Corsair punches above class — handles like medium fighter","Upgrade S4 nose to AD4B Gatling for max burst"]);
 
 S("Caterpillar","Drake Interplanetary","Cargo","L",5,110,"S3",
-  [T("S3 Nose (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Nose (Stbd, 2x)",3,"cf337","2x CF-337"),T("S2 Side (Port)",2,"cf227","CF-227 Badger"),T("S2 Side (Stbd)",2,"cf227","CF-227 Badger")],
+  [T("S3 Nose (Port)",3,"cf337","2x CF-337",2),T("S3 Nose (Stbd)",3,"cf337","2x CF-337",2),T("S2 Side (Port)",2,"cf227","CF-227 Badger"),T("S2 Side (Stbd)",2,"cf227","CF-227 Badger")],
   [],{pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["576 SCU modular cargo — expandable containers","All turrets remote — needs gunners","Not a warship — prioritize avoidance"]);
 
@@ -1460,13 +1445,13 @@ S("Hull C","MISC","Cargo","XL",3,85,"S3",
   ["4,608 SCU — largest cargo capacity","Station-to-station only — cannot land loaded","Always fly with armed escort"]);
 
 S("Starlancer MAX","MISC","Cargo","L",4,120,"S3",
-  [T("S3 Top (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Top (Stbd, 2x)",3,"cf337","2x CF-337"),T("S2 Side (Port)",2,"cf227","CF-227 Badger"),T("S2 Side (Stbd)",2,"cf227","CF-227 Badger")],
+  [T("S3 Top (Port)",3,"cf337","2x CF-337",2),T("S3 Top (Stbd)",3,"cf337","2x CF-337",2),T("S2 Side (Port)",2,"cf227","CF-227 Badger"),T("S2 Side (Stbd)",2,"cf227","CF-227 Badger")],
   [M("S2 Rack (Port, x8)",2,8,"ignite2"),M("S2 Rack (Stbd, x8)",2,8,"ignite2")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["4 turrets + 16 missiles — well armed freighter","Good balance of cargo and defense","Upgrade turrets to Tarantula Mk3"]);
 
 S("Starlancer TAC","MISC","Fighter","L",5,130,"S3",
-  [T("S4 Turret 1 (2x)",4,"ad4b","2x AD4B"),T("S4 Turret 2 (2x)",4,"ad4b","2x AD4B"),T("S3 Turret (2x)",3,"cf337","2x CF-337"),T("S2 Side (Port)",2,"cf227","CF-227 Badger"),T("S2 Side (Stbd)",2,"cf227","CF-227 Badger")],
+  [T("S4 Turret 1",4,"ad4b","2x AD4B",2),T("S4 Turret 2",4,"ad4b","2x AD4B",2),T("S3 Turret",3,"cf337","2x CF-337",2),T("S2 Side (Port)",2,"cf227","CF-227 Badger"),T("S2 Side (Stbd)",2,"cf227","CF-227 Badger")],
   [M("S3 Rack (x8)",3,8,"tbolt3")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["TAC = combat Starlancer — 2x S4 + S3 + 2x S2 + 8x S3 missiles","One of most heavily armed non-capital ships","Serious firepower for deep space patrol"]);
@@ -1551,7 +1536,7 @@ S("400i","Origin Jumpworks","Exploration","M",2,165,"S2",
   ["Luxury medium explorer — Atlas S2 QD from factory","2x S3 + rear turret for good coverage"]);
 
 S("600i Explorer","Origin Jumpworks","Exploration","L",5,140,"S3",
-  [T("S4 Turret (Port, 2x)",4,"ad4b","2x AD4B per turret"),T("S4 Turret (Stbd, 2x)",4,"ad4b","2x AD4B per turret"),T("S3 Chin",3,"cf337","CF-337 Panther")],
+  [T("S4 Turret (Port)",4,"ad4b","2x AD4B per turret",2),T("S4 Turret (Stbd)",4,"ad4b","2x AD4B per turret",2),T("S3 Chin",3,"cf337","CF-337 Panther")],
   [M("S3 Rack",3,4,"tbolt3")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Atlas S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Luxury superyacht — Atlas S3 QD from factory","2x S4 turrets + S3 chin + 4x S3 missiles","Best interiors in game"]);
@@ -1583,25 +1568,25 @@ S("Aurora LN","RSI","Starter","XS",1,175,"S1",
   ["LN = 3x S1 + 2x S1 missiles","3x NN-13 = 759 DPS — surprisingly effective","Upgrade to Gladius ASAP"]);
 
 S("Constellation Andromeda","RSI","Transport","L",4,155,"S2",
-  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
+  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port)",3,"cf337","CF-337 Panther",1),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
   [M("S3 Rack 1 (Port, x4)",3,4,"tbolt3"),M("S3 Rack 2 (Stbd, x4)",3,4,"tbolt3"),M("S3 Rack 3 (Port, x4)",3,4,"tbolt3"),M("S3 Rack 4 (Stbd, x4)",3,4,"tbolt3")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:1,cooler:2,qd:1}},
   ["96 SCU + Merlin snub + 2x S4 pilot + 4x S3 gunner + 16x S3 missiles","Upgrade S4 nose to AD4B Gatling for maximum burst"]);
 
 S("Constellation Aquila","RSI","Exploration","L",4,155,"S2",
-  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
+  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port)",3,"cf337","CF-337 Panther",1),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Tail (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
   [M("S3 Rack (Port, x4)",3,4,"tbolt3"),M("S3 Rack (Stbd, x4)",3,4,"tbolt3")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Atlas S2",counts:{pp:2,sg:1,cooler:2,qd:1}},
   ["Aquila: advanced scanner + Atlas S2 QD from factory","Same weapon hardpoints as Andromeda"]);
 
 S("Constellation Phoenix","RSI","Transport","L",4,150,"S2",
-  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
+  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port)",3,"cf337","CF-337 Panther",1),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
   [M("S3 Rack (Port, x4)",3,4,"tbolt3"),M("S3 Rack (Stbd, x4)",3,4,"tbolt3")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:1,cooler:2,qd:1}},
   ["Phoenix: VIP suites replace cargo hold","Still combat capable with S4 nose + S3 turrets"]);
 
 S("Constellation Taurus","RSI","Cargo","L",4,150,"S2",
-  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port) [Gunner]",3,"cf337","CF-337 Panther"),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
+  [W("S4 Nose (Port)",4,"cf447","CF-447 Rhino"),W("S4 Nose (Stbd)",4,"cf447","CF-447 Rhino"),T("S3 Top (Port)",3,"cf337","CF-337 Panther",1),T("S3 Top (Stbd) [Gunner]",3,"cf337","CF-337 Panther")],
   [M("S3 Rack (Port, x4)",3,4,"tbolt3"),M("S3 Rack (Stbd, x4)",3,4,"tbolt3")],
   {pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:1,cooler:2,qd:1}},
   ["Taurus: 174 SCU expanded cargo hold","Same weapons as Phoenix — well armed freighter"]);
@@ -1619,7 +1604,7 @@ S("Scorpius Antares","RSI","Fighter","M",2,190,"S2",
   ["EMP device + QD jammer replace turret","4x S3 pilot wings still very effective","Stock EMP missiles for disabling QT drives"]);
 
 S("Polaris","RSI","Capital","XL",10,105,"S3",
-  [T("S4 Turret 1 (2x)",4,"ad4b","2x AD4B"),T("S4 Turret 2 (2x)",4,"ad4b","2x AD4B"),T("S4 Turret 3 (2x)",4,"ad4b","2x AD4B"),T("S4 Turret 4 (2x)",4,"ad4b","2x AD4B"),T("S4 Turret 5 (2x)",4,"ad4b","2x AD4B")],
+  [T("S4 Turret 1",4,"ad4b","2x AD4B",2),T("S4 Turret 2",4,"ad4b","2x AD4B",2),T("S4 Turret 3",4,"ad4b","2x AD4B",2),T("S4 Turret 4",4,"ad4b","2x AD4B",2),T("S4 Turret 5",4,"ad4b","2x AD4B",2)],
   [M("S10 Torp 1",10,1,"s9torp"),M("S10 Torp 2",10,1,"s9torp"),M("S10 Torp 3",10,1,"s9torp"),M("S10 Torp 4",10,1,"s9torp"),M("S10 Torp 5",10,1,"s9torp")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:3,cooler:2,qd:1}},
   ["5x S10 torpedoes — destroys capital ships","5x S4 dual-gun turrets all-round defense","Built-in Merlin snub — 8-12 crew"]);
@@ -1650,7 +1635,7 @@ S("Hermes","RSI","Transport","L",3,130,"S3",
   ["High-value passenger transport","2x S3 turrets for defense","Not a combat ship — prioritize avoidance"]);
 
 S("Galaxy","RSI","Capital","XL",8,90,"S3",
-  [T("S4 Turret 1 (2x)",4,"ad4b","2x AD4B"),T("S4 Turret 2 (2x)",4,"ad4b","2x AD4B"),T("S3 Turret 3 (2x)",3,"cf337","2x CF-337"),T("S3 Turret 4 (2x)",3,"cf337","2x CF-337")],
+  [T("S4 Turret 1",4,"ad4b","2x AD4B",2),T("S4 Turret 2",4,"ad4b","2x AD4B",2),T("S3 Turret 3",3,"cf337","2x CF-337",2),T("S3 Turret 4",3,"cf337","2x CF-337",2)],
   [],{pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Modular capital — interchangeable mission modules","2x S4 + 2x S3 turrets for defense","Hospital, refinery, hangar bay module variants"]);
 
@@ -1665,7 +1650,7 @@ S("Zeus Mk II ES","RSI","Exploration","M",2,165,"S2",
   ["Zeus ES: Atlas S2 QD from factory — explorer variant","32 SCU cargo with excellent exploration range"]);
 
 S("Salvation","RSI","Support","L",4,140,"S2",
-  [T("S3 Turret (Port, 2x)",3,"cf337","2x CF-337"),T("S3 Turret (Stbd, 2x)",3,"cf337","2x CF-337"),T("S2 Rear Turret",2,"cf227","CF-227 Badger")],
+  [T("S3 Turret (Port)",3,"cf337","2x CF-337",2),T("S3 Turret (Stbd)",3,"cf337","2x CF-337",2),T("S2 Rear Turret",2,"cf227","CF-227 Badger")],
   [],{pp:"Regulus S2",sg:"Rampart S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Search and rescue — med bay + engineering support","Well armed for a support ship"]);
 
@@ -1675,7 +1660,7 @@ S("Orion","RSI","Mining","XL",4,80,"S3",
   ["Largest dedicated mining ship — massive extraction","4 crew: pilot + 3 mining operators","Defense turrets minimal — avoid combat"]);
 
 S("Perseus","RSI","Capital","XL",8,100,"S3",
-  [W("S8 Main (Port)",8,"s8bc","S8 Ballistic Cannon"),W("S8 Main (Stbd)",8,"s8bc","S8 Ballistic Cannon"),T("S3 AF Turret 1 (2x)",3,"cf337","2x CF-337"),T("S3 AF Turret 2 (2x)",3,"cf337","2x CF-337"),T("S3 AF Turret 3 (2x)",3,"cf337","2x CF-337"),T("S3 AF Turret 4 (2x)",3,"cf337","2x CF-337")],
+  [W("S8 Main (Port)",8,"s8bc","S8 Ballistic Cannon"),W("S8 Main (Stbd)",8,"s8bc","S8 Ballistic Cannon"),T("S3 AF Turret 1",3,"cf337","2x CF-337",2),T("S3 AF Turret 2",3,"cf337","2x CF-337",2),T("S3 AF Turret 3",3,"cf337","2x CF-337",2),T("S3 AF Turret 4",3,"cf337","2x CF-337",2)],
   [M("S5 Bay (Port, x4)",5,4,"tbolt5"),M("S5 Bay (Stbd, x4)",5,4,"tbolt5")],
   {pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["2x S8 cannons (1400 DPS each)","4x S3 anti-fighter turrets","6-8 crew minimum"]);
@@ -1692,6 +1677,33 @@ S("San'tok.yai","AopoA (Xi'an)","Fighter","M",1,205,"S2",
   [M("S2 Rack (Port)",2,4,"ignite2"),M("S2 Rack (Stbd)",2,4,"ignite2")],
   {pp:"Regulus S2",sg:"Palisade S2",cooler:"Arctic S2",qd:"Drift S2",counts:{pp:1,sg:2,cooler:2,qd:1}},
   ["Xi'an medium — 2x S4 fixed + 2x S3 wing","Unique Xi'an maneuverability with heavy firepower","Upgrade S4 to AD4B Gatling for devastating DPS"]);
+// ═══ MISSILE RACK DATABASE ═══
+// Racks hold missiles - each rack has a size and capacity
+var RACK_DB = {
+  // Size 1 racks
+  "VK-00 S1": {sz:1,cap:2,mfr:"Talon Armament",loc:"Centermass"},
+  "MSD-111":  {sz:1,cap:1,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  // Size 2 racks  
+  "MSD-221":  {sz:2,cap:2,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "MSD-222":  {sz:2,cap:4,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "SinFire S2":{sz:2,cap:4,mfr:"Talon Armament",loc:"Grim HEX"},
+  // Size 3 racks
+  "MSD-332":  {sz:3,cap:2,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "MSD-333":  {sz:3,cap:4,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "SinFire S3":{sz:3,cap:4,mfr:"Talon Armament",loc:"Grim HEX"},
+  // Size 4 racks
+  "MSD-441":  {sz:4,cap:1,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "MSD-442":  {sz:4,cap:2,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  // Size 5 racks
+  "MSD-541":  {sz:5,cap:2,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "MSD-542":  {sz:5,cap:4,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  "MSD-543":  {sz:5,cap:8,mfr:"Marsden & Hull",loc:"Platinum Bay"},
+  // Size 9 (torpedo launchers)
+  "TARPI-9":  {sz:9,cap:1,mfr:"Behring",loc:"Platinum Bay"},
+  "LIDAR-9":  {sz:9,cap:1,mfr:"Wei-Tek",loc:"CenterMass"},
+};
+var curRacks = {}; // stores selected rack per slot
+
 // ═══ LOCATIONS ═══
 var LOCATIONS=[
   {name:"CenterMass — Area18",sys:"ArcCorp · Stanton",tags:["weapons"],st:"CF-series Klaus & Werner S1–S4, Omnisky cannons, Tarantula/AD4B/AD5B Gatlings, M-series Behring, Klaus Broadsword S5. Best one-stop weapon shop.",tip:"⭐ Best for energy weapons and legal ballistics. Check 2nd floor terminal — stock rotates each session."},
@@ -1765,6 +1777,10 @@ window._WIKIMAP = {
 };
 
 var selShip='',selAct='Stock Build',curSlots={},curMissiles={},curComps={};
+var curCompEnabled={};
+var curSlotEnabled={};
+var curMisEnabled={};
+var curRacks={};
 var mode='SCM',pipsW=3,pipsE=3,pipsS=2;
 var userPwrAdj = {}; // per-ship power adjustments: {shipName: {systemKey: segments}}
 var apiKey='',aiHistory=[];
@@ -2242,13 +2258,51 @@ function generate(){
   var wHTML='';
   def.slots.forEach(function(sl,i){
     curSlots['sl'+i]=sl.default;
-    wHTML+='<div class="slot-row">'
+    var wEnabled=(curSlotEnabled['sl'+i]!==false);
+    var gunCount = sl.count || 1;
+    wHTML+='<div class="slot-row" id="slotrow'+i+'" style="opacity:'+(wEnabled?'1':'0.5')+'">'
       +'<div class="slot-top">'
-            +'<div class="slot-thumb" id="wth'+i+'"></div>'
+      +'<div class="slot-thumb" id="wth'+i+'"></div>'
       +'<div class="slot-body">'
-      +'<div class="slot-body-top"><span class="sz-chip sz-s'+sl.sz+'">S'+sl.sz+'</span><span class="slot-lbl">'+sl.lbl+'</span>'+(sl.note?'<span class="slot-note"> &middot; '+sl.note+'</span>':'')+'</div>'
-      +'<select class="slot-sel'+(sl.fixed?' mod':'')+'" data-slotidx="'+i+'" data-sz="'+sl.sz+'" '+(sl.fixed?'disabled':'')+' onchange="onWepChange(this)">'+wepOpts(sl.sz,sl.default,sl.fixed)+'</select>'
-      +'</div></div>'
+      +'<div class="slot-body-top">'
+      +'<span class="sz-chip sz-s'+sl.sz+'">S'+sl.sz+'</span>'
+      +'<span class="slot-lbl">'+sl.lbl+'</span>'
+      +(gunCount>1?'<span class="slot-note"> &times;'+gunCount+'</span>':'')
+      +(sl.note&&gunCount===1?'<span class="slot-note"> &middot; '+sl.note+'</span>':'')
+      +(sl.fixed?'':'<button onclick="toggleSlot(event,'+i+')" style="margin-left:auto;background:'+(wEnabled?'var(--green)':'var(--bg4)')+';border:1px solid '+(wEnabled?'var(--green)':'var(--border)')+';border-radius:10px;padding:1px 8px;font-size:9px;font-family:var(--fmono);color:'+(wEnabled?'#fff':'var(--t3)')+';cursor:pointer;transition:all .2s">'+(wEnabled?'ON':'OFF')+'</button>')
+      +'</div>';
+    if(gunCount > 1 && sl.type === 'turret') {
+      // Tree-style compact turret guns
+      var tExpandId = 'texp'+i;
+      var gunSummary = [];
+      for(var gi=0;gi<gunCount;gi++){var gk='sl'+i+'_gun'+gi;var gv=curSlots[gk]||sl.default;var wn=WEAPONS.find(function(x){return x.id===gv;});gunSummary.push(wn?wn.name.split(' ').slice(0,2).join(' '):'—');}
+      var allSame = gunSummary.every(function(x){return x===gunSummary[0];});
+      wHTML+='<div style="border-left:2px solid var(--border);margin-left:4px;padding-left:8px;margin-top:4px">'
+        +'<div onclick="toggleTurretTree(\''+tExpandId+'\')" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:3px 0;user-select:none">'
+        +'<span style="font-size:9px;color:var(--t3);font-family:var(--fmono)">&#9660;</span>'
+        +'<span style="font-size:10px;color:var(--t2);font-family:var(--fmono);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(allSame?gunSummary[0]+' ×'+gunCount:gunSummary.join(', '))+'</span>'
+        +'<button onclick="linkAllTurretGuns(event,'+i+','+gunCount+')" style="background:none;border:1px solid var(--border);border-radius:8px;padding:0 6px;font-size:8px;font-family:var(--fmono);color:var(--t3);cursor:pointer;line-height:16px">SYNC</button>'
+        +'</div>'
+        +'<div id="'+tExpandId+'" style="display:none;padding-top:4px">';
+      for(var gi=0;gi<gunCount;gi++){
+        var gKey='sl'+i+'_gun'+gi;
+        var gCur=curSlots[gKey]||sl.default;
+        var gStock=(gCur===sl.default);
+        var isLast=(gi===gunCount-1);
+        wHTML+='<div style="display:flex;align-items:flex-start;gap:4px;margin-bottom:'+(isLast?'0':'4px')+'">'
+          +'<div style="display:flex;flex-direction:column;align-items:center;padding-top:6px;flex-shrink:0">'
+          +'<span style="font-size:9px;color:var(--border);font-family:monospace">'+(isLast?'└':'├')+'</span>'
+          +'</div>'
+          +'<div style="flex:1;min-width:0">'
+          +'<select class="slot-sel'+(gStock?'':' mod')+'" data-slotidx="'+i+'" data-gunidx="'+gi+'" data-sz="'+sl.sz+'" style="font-size:11px;padding:3px 6px" '+(wEnabled?'onchange="onTurretGunChange(this)"':'disabled')+'>'+wepOpts(sl.sz,gCur,false)+'</select>'
+          +'</div></div>';
+      }
+      wHTML+='</div></div>';
+    } else {
+      // Single gun slot
+      wHTML+='<select class="slot-sel'+(sl.fixed?' mod':'')+'" data-slotidx="'+i+'" data-sz="'+sl.sz+'" '+(sl.fixed||!wEnabled?'disabled':'')+' '+(sl.fixed?'':'onchange="onWepChange(this)"')+'>'+wepOpts(sl.sz,sl.default,sl.fixed)+'</select>';
+    }
+    wHTML+='</div></div>'
       +'<div class="slot-info" id="si'+i+'">'+wepInfo(sl.default)+'</div>'
       +'</div>';
   });
@@ -2256,33 +2310,128 @@ function generate(){
   var mHTML='';
   (def.missiles||[]).forEach(function(ms,i){
     curMissiles['ms'+i]=ms.default;
-    mHTML+='<div class="slot-row">'
+    var mEnabled=(curMisEnabled['ms'+i]!==false);
+    var misCount = ms.count || 1;
+    // Build missile summary for tree header
+    var misSummary = [];
+    for(var mi=0;mi<misCount;mi++){var mk='ms'+i+'_'+mi;var mv=curMissiles[mk]||ms.default;var mw=WEAPONS.find(function(x){return x.id===mv;});misSummary.push(mw?mw.name.split(' ').slice(0,2).join(' '):'—');}
+    var misAllSame = misSummary.every(function(x){return x===misSummary[0];});
+    var mTreeId='mtree'+i;
+    var curRack = curRacks['ms'+i] || ms.lbl.split(' ').slice(0,2).join(' ');
+    // Build rack options for this slot size
+    // Auto-select best matching rack if none chosen yet
+    if(!curRacks['ms'+i]){
+      var bestRack=null,bestDiff=999;
+      Object.keys(RACK_DB).forEach(function(rk){
+        var rd=RACK_DB[rk];
+        if(rd.sz===ms.sz){var diff=Math.abs(rd.cap-ms.count);if(diff<bestDiff){bestDiff=diff;bestRack=rk;}}
+      });
+      if(bestRack)curRacks['ms'+i]=bestRack;
+    }
+    var rackOpts='';
+    Object.keys(RACK_DB).forEach(function(rk){
+      var rd=RACK_DB[rk];
+      if(rd.sz===ms.sz){rackOpts+='<option value="'+rk+'"'+(rk===curRacks['ms'+i]?' selected':'')+'>'+rk+' (×'+rd.cap+') — '+rd.mfr+'</option>';}
+    });
+    if(!rackOpts)rackOpts='<option value="">No S'+ms.sz+' racks in DB</option>';
+    mHTML+='<div class="slot-row" id="misrow'+i+'" style="opacity:'+(mEnabled?'1':'0.5')+'">'
       +'<div class="slot-top">'
       +'<div class="slot-thumb"></div>'
       +'<div class="slot-body">'
-      +'<div class="slot-body-top"><span class="sz-chip sz-s'+ms.sz+'">S'+ms.sz+'</span><span class="slot-lbl">'+ms.lbl+'</span><span class="slot-note"> &times; '+ms.count+'</span></div>'
-      +'<select class="slot-sel" data-missidx="'+i+'" data-maxsz="'+ms.sz+'" onchange="onMisChange(this)">'+misOpts(ms.sz,ms.default)+'</select>'
+      +'<div class="slot-body-top">'
+      +'<span class="sz-chip sz-s'+ms.sz+'">S'+ms.sz+'</span>'
+      +'<span class="slot-lbl">'+ms.lbl+'</span>'
+      +'<span class="slot-note"> &times; '+ms.count+'</span>'
+      +'<button onclick="toggleMis(event,'+i+')" style="margin-left:auto;background:'+(mEnabled?'var(--green)':'var(--bg4)')+';border:1px solid '+(mEnabled?'var(--green)':'var(--border)')+';border-radius:10px;padding:1px 8px;font-size:9px;font-family:var(--fmono);color:'+(mEnabled?'#fff':'var(--t3)')+';cursor:pointer;transition:all .2s">'+(mEnabled?'ON':'OFF')+'</button>'
+      +'</div>'
+      +'<div style="margin-bottom:4px">'
+      +'<div style="font-size:9px;color:var(--t3);font-family:var(--fmono);margin-bottom:2px;letter-spacing:.5px">RACK UNIT</div>'
+      +'<select class="slot-sel" data-rackidx="'+i+'" data-racksz="'+ms.sz+'" style="font-size:11px;padding:3px 6px" '+(mEnabled?'onchange="onRackChange(this)"':'disabled')+'>'+rackOpts+'</select>'
+      +'</div>'
+      +'<div style="border-left:2px solid var(--border);margin-left:4px;padding-left:8px;margin-top:4px">'
+      +'<div onclick="toggleTurretTree(\''+mTreeId+'\')" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:3px 0;user-select:none">'
+      +'<span style="font-size:9px;color:var(--t3);font-family:var(--fmono)">&#9660;</span>'
+      +'<span style="font-size:10px;color:var(--t2);font-family:var(--fmono);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(misAllSame?misSummary[0]+' ×'+misCount:misSummary.join(', '))+'</span>'
+      +'<button onclick="linkAllMissiles(event,'+i+','+misCount+')" style="background:none;border:1px solid var(--border);border-radius:8px;padding:0 6px;font-size:8px;font-family:var(--fmono);color:var(--t3);cursor:pointer;line-height:16px">SYNC</button>'
+      +'</div>'
+      +'<div id="'+mTreeId+'" style="display:none;padding-top:4px">';
+    for(var mi=0;mi<misCount;mi++){
+      var mKey='ms'+i+'_'+mi;
+      var mCur=curMissiles[mKey]||ms.default;
+      var mStock=(mCur===ms.default);
+      var mLast=(mi===misCount-1);
+      mHTML+='<div style="display:flex;align-items:flex-start;gap:4px;margin-bottom:'+(mLast?'0':'4px')+'">'
+        +'<div style="display:flex;flex-direction:column;align-items:center;padding-top:6px;flex-shrink:0">'
+        +'<span style="font-size:9px;color:var(--border);font-family:monospace">'+(mLast?'└':'├')+'</span>'
+        +'</div>'
+        +'<div style="flex:1;min-width:0">'
+        +'<select class="slot-sel'+(mStock?'':' mod')+'" data-missidx="'+i+'" data-misgidx="'+mi+'" data-maxsz="'+ms.sz+'" style="font-size:11px;padding:3px 6px" '+(mEnabled?'onchange="onMisItemChange(this)"':'disabled')+'>'+misOpts(ms.sz,mCur)+'</select>'
+        +'</div></div>';
+    }
+    mHTML+='</div></div>'
       +'</div></div>'
-      +'<div class="slot-info" id="mi'+i+'">'+misInfo(ms.default)+'</div>'
+      +'<div class="slot-info" id="mi'+i+'">'+misInfo(curMissiles['ms'+i]||ms.default)+'</div>'
       +'</div>';
   });
 
   var compKeys={pp:"Power Plant",sg:"Shield Generator",cooler:"Cooler",qd:"Quantum Drive",radar:"Radar"};
   var cHTML='';
   ['pp','sg','cooler','qd','radar'].forEach(function(k){
-    var cur=curComps[k]||'';
-    var isStock=(cur===def.comps[k]);
+    var cnt=(def.comps.counts&&def.comps.counts[k])||1;
     var _ico={pp:'&#9889;',sg:'&#11041;',cooler:'&#10052;',qd:'&#9678;',radar:'&#128225;'}[k]||'&#9672;';
-    var _cnt=k==='sg'?'&times;'+(def.comps.counts&&def.comps.counts.sg||1):k==='cooler'?'&times;'+(def.comps.counts&&def.comps.counts.cooler||1):'';
-    cHTML+='<div class="comp-row">'
-      +'<div class="comp-row-hd">'
-      +'<div class="comp-icon-box">'+_ico+'</div>'
-      +'<div class="comp-meta"><span class="comp-type-lbl">'+compKeys[k]+'</span><span class="comp-sz-lbl">'+csz+(_cnt?' '+_cnt:'')+'</span></div>'
-      +'</div>'
-      +'<div class="comp-body">'
-      +'<div class="comp-sel-wrap"><select class="slot-sel'+(isStock?'':' mod')+'" data-compkey="'+k+'" onchange="onCompChange(this)">'+compOpts(k,cur)+'</select></div>'
-      +'<div id="ci_'+k+'">'+getCompStatHTML(k,cur)+'</div>'
-      +'</div></div>';
+    var compLabel=compKeys[k];
+    var expandId='compexp_'+k;
+
+    if(cnt===1){
+      // Single slot - show directly, no accordion
+      var cur=curComps[k]||def.comps[k]||'';
+      var isStock=(cur===def.comps[k]);
+      cHTML+='<div class="comp-row">'
+        +'<div class="comp-row-hd">'
+        +'<div class="comp-icon-box">'+_ico+'</div>'
+        +'<div class="comp-meta"><span class="comp-type-lbl">'+compLabel+'</span><span class="comp-sz-lbl">'+csz+'</span></div>'
+        +'</div>'
+        +'<div class="comp-body">'
+        +'<div class="comp-sel-wrap"><select class="slot-sel'+(isStock?'':' mod')+'" data-compkey="'+k+'" onchange="onCompChange(this)">'+compOpts(k,cur)+'</select></div>'
+        +'<div id="ci_'+k+'">'+getCompStatHTML(k,cur)+'</div>'
+        +'</div></div>';
+    } else {
+      // Multiple slots - accordion header + expandable slots
+      var cur0=curComps[k+'_0']||curComps[k]||def.comps[k]||'';
+      var summaryName=cur0||'—';
+      // Show abbreviated current selections in header
+      var slotSummary=[];
+      for(var si=0;si<cnt;si++){var sk=k+'_'+si;var sv=curComps[sk]||curComps[k]||def.comps[k]||'—';slotSummary.push(sv.split(' ')[0]);}
+      cHTML+='<div class="comp-row">'
+        +'<div class="comp-row-hd" onclick="toggleCompExpand(\''+expandId+'\')" style="cursor:pointer;user-select:none">'
+        +'<div class="comp-icon-box">'+_ico+'</div>'
+        +'<div class="comp-meta"><span class="comp-type-lbl">'+compLabel+'</span><span class="comp-sz-lbl">'+csz+' &times;'+cnt+'</span></div>'
+        +'<div style="margin-left:auto;font-size:10px;color:var(--t3);font-family:var(--fmono);display:flex;align-items:center;gap:6px">'
+        +'<span id="'+expandId+'_lbl" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+slotSummary.join(' / ')+'</span>'
+        +'<span id="'+expandId+'_arr" style="transition:transform .2s">&#9660;</span>'
+        +'</div>'
+        +'</div>'
+        +'<div id="'+expandId+'" style="display:none;padding:8px 0 4px">'
+        +'<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;padding:0 2px">'
+        +'<span style="font-size:9px;letter-spacing:1px;color:var(--t3);font-family:var(--fmono)">'+cnt+' SLOTS — configure independently or</span>'
+        +'<button onclick="linkAllComps(event,\''+k+'\','+cnt+')" style="background:none;border:1px solid var(--border);border-radius:10px;padding:1px 8px;font-size:9px;font-family:var(--fmono);color:var(--t3);cursor:pointer">LINK ALL</button>'
+        +'</div>';
+      for(var si=0;si<cnt;si++){
+        var slotKey=k+'_'+si;
+        var cur=curComps[slotKey]||curComps[k]||def.comps[k]||'';
+        var isStock=(cur===def.comps[k]);
+        var enabled=(curCompEnabled[slotKey]!==false);
+        cHTML+='<div style="margin-bottom:6px;opacity:'+(enabled?'1':'0.4')+'">'
+          +'<div style="display:flex;align-items:center;margin-bottom:3px">'
+          +'<span style="font-size:9px;color:var(--t3);font-family:var(--fmono);letter-spacing:.5px">SLOT '+(si+1)+'</span>'
+          +'<button onclick="toggleCompSlot(event,\''+slotKey+'\',\''+k+'\','+cnt+')" style="margin-left:auto;background:'+(enabled?'var(--green)':'var(--border)')+';border:none;border-radius:10px;padding:2px 10px;font-size:9px;font-family:var(--fmono);color:'+(enabled?'#fff':'var(--t3)')+';cursor:pointer;transition:all .2s">'+(enabled?'ON':'OFF')+'</button>'
+          +'</div>'
+          +'<div class="comp-sel-wrap"><select class="slot-sel'+(isStock?'':' mod')+'" data-compkey="'+slotKey+'" onchange="onCompChange(this)"'+(enabled?'':' disabled style="opacity:.5"')+'>'+compOpts(k,cur)+'</select></div>'
+          +'<div id="ci_'+slotKey+'">'+getCompStatHTML(k,cur)+'</div>'
+          +'</div>';
+      }
+      cHTML+='</div></div>';
+    }
   });
 
   var tips=(def.tips||[]).map(function(t){return '<li>'+t+'</li>';}).join('');
@@ -2355,13 +2504,53 @@ function onMisChange(sel){
   updateTargetAnalysis();
 }
 function onCompChange(sel){
-  var k=sel.dataset.compkey;curComps[k]=sel.value;
+  var slotKey=sel.dataset.compkey;
+  var k=slotKey.indexOf('_')>-1?slotKey.split('_')[0]:slotKey;
+  curComps[slotKey]=sel.value;
+  curComps[k]=sel.value;
   var def=SHIP_DATA[selShip];
   sel.classList.toggle('mod',sel.value!==(def&&def.comps?def.comps[k]:''));
-  var el=document.getElementById('ci_'+k);
+  var el=document.getElementById('ci_'+slotKey);
   if(el)el.innerHTML=getCompStatHTML(k,sel.value);
+  // Update accordion summary label
+  var cnt=(def&&def.comps&&def.comps.counts&&def.comps.counts[k])||1;
+  if(cnt>1){
+    var lbl=document.getElementById('compexp_'+k+'_lbl');
+    if(lbl){
+      var parts=[];
+      for(var i=0;i<cnt;i++){var v=curComps[k+'_'+i]||curComps[k]||'—';parts.push(v.split(' ')[0]);}
+      lbl.textContent=parts.join(' / ');
+    }
+  }
   updatePower();
   updateTargetAnalysis();
+}
+
+function linkAllComps(e,k,cnt){
+  e.preventDefault();
+  // Get value from first slot
+  var firstKey=k+'_0';
+  var firstSel=document.querySelector('[data-compkey="'+firstKey+'"]');
+  if(!firstSel)firstSel=document.querySelector('[data-compkey="'+k+'"]');
+  if(!firstSel)return;
+  var val=firstSel.value;
+  // Apply to all slots
+  for(var i=0;i<cnt;i++){
+    var sk=k+'_'+i;
+    var sel=document.querySelector('[data-compkey="'+sk+'"]');
+    if(sel){sel.value=val;curComps[sk]=val;}
+    var ci=document.getElementById('ci_'+sk);
+    if(ci)ci.innerHTML=getCompStatHTML(k,val);
+  }
+  curComps[k]=val;
+  updatePower();
+  updateTargetAnalysis();
+  // Flash button to confirm
+  var btn=e.target;
+  btn.textContent='LINKED ✓';
+  btn.style.color='var(--green)';
+  btn.style.borderColor='var(--green)';
+  setTimeout(function(){btn.textContent='LINK ALL';btn.style.color='var(--t3)';btn.style.borderColor='var(--border)';},1500);
 }
 
 // ═══ POWER PANEL — live reactive ═══
@@ -2422,7 +2611,7 @@ var SHIP_CLASS_MAP = {
   ["Military variant with rail gun","More missile capacity than Idris-P","Requires org coordination to crew"]),
 
   "Odyssey":S("Odyssey","Crusader Industries","Exploration","XL",6,95,"S3",
-  [T("S3 Top (2x)",3,"cf337","2x CF-337"),T("S3 Belly (2x)",3,"cf337","2x CF-337"),W("S2 Nose (Port)",2,"att2","Attrition-2"),W("S2 Nose (Stbd)",2,"att2","Attrition-2")],
+  [T("S3 Top (2x)",3,"cf337","2x CF-337"),T("S3 Belly",3,"cf337","2x CF-337",2),W("S2 Nose (Port)",2,"att2","Attrition-2"),W("S2 Nose (Stbd)",2,"att2","Attrition-2")],
   [],{pp:"Regulus S3",sg:"Rampart S3",cooler:"Blizzard S3",qd:"Drift S3",counts:{pp:2,sg:2,cooler:2,qd:1}},
   ["Self-sustaining expedition vessel","Fuel refinery onboard","Long-range explorer — needs full crew"]),
 
@@ -2607,6 +2796,13 @@ function updatePower() {
 
     // Component counts (how many of each slot this ship has)
     var compCounts = (def.comps && def.comps.counts) || {pp:1,sg:1,cooler:1,qd:1};
+    // Apply effective counts from disabled slots
+    if(curComps._effectiveCounts){
+      compCounts=Object.assign({},compCounts);
+      Object.keys(curComps._effectiveCounts).forEach(function(k){
+        if(curComps._effectiveCounts[k]!==undefined)compCounts[k]=curComps._effectiveCounts[k];
+      });
+    }
 
     // Baseline = drawMin × count — the minimum each component draws just to stay online
     // This keeps the default state within budget so the player can allocate upward
@@ -2819,6 +3015,12 @@ function updatePower() {
   } else {
     // ── DB-only fallback: estimate segment distribution matching live API style ──
     var cC = (def.comps && def.comps.counts) || {pp:1, sg:1, cooler:1, qd:1};
+    if(curComps._effectiveCounts){
+      cC=Object.assign({},cC);
+      Object.keys(curComps._effectiveCounts).forEach(function(k){
+        if(curComps._effectiveCounts[k]!==undefined)cC[k]=curComps._effectiveCounts[k];
+      });
+    }
     var ppDb_f   = COMP_DB.pp     && COMP_DB.pp[curComps.pp];
     var sgDb_f   = COMP_DB.sg     && COMP_DB.sg[curComps.sg];
     var coolDb_f = COMP_DB.cooler && COMP_DB.cooler[curComps.cooler];
@@ -3316,7 +3518,7 @@ function buildWeaponsDB(szF,tyF){
   if(tyF!=='all')ws=ws.filter(function(w){return w.type===tyF;});
   ws.sort(function(a,b){return b.dps-a.dps;});
   var fb=document.getElementById('wfiltBar');
-  if(!fb.children.length){
+  if(fb && !fb.children.length){
     [['all','ALL'],['1','S1'],['2','S2'],['3','S3'],['4','S4'],['5','S5+']].forEach(function(sz){
       var b=document.createElement('button');b.className='wfb'+(szF===sz[0]?' on':'');b.textContent=sz[1];b.dataset.sz=sz[0];
       b.onclick=function(){document.querySelectorAll('[data-sz]').forEach(function(x){x.classList.remove('on');});b.classList.add('on');buildWeaponsDB(sz[0],document.querySelector('[data-ty].on')&&document.querySelector('[data-ty].on').dataset.ty||'all');};
@@ -3796,6 +3998,7 @@ function updateTargetAnalysis(forceName) {
   var myW = [];
   if (myDef) {
     myDef.slots.forEach(function(sl, i) {
+      if(curSlotEnabled['sl'+i]===false)return;
       var wid = curSlots['sl' + i] || sl.default;
       var w = WEAPONS.find(function(x) { return x.id === wid; });
       if (w && !w.type.includes('missile') && w.type !== 'torpedo') {
@@ -3955,9 +4158,9 @@ function updateTargetAnalysis(forceName) {
       var vt = iWin?'YOU WIN':tie?'EVEN MATCH':'YOU LOSE';
       var vs = tie?'Equal TTK':(iWin?'Kill '+adv+'s faster':'Die '+adv+'s sooner');
       vw.style.display = 'block';
-      vw.innerHTML = '<div style="background:'+(iWin?'rgba(34,197,94,.1)':tie?'rgba(234,179,8,.1)':'rgba(239,68,68,.1)')+';border:2px solid '+vc+';border-radius:var(--r);padding:8px;display:flex;align-items:center;justify-content:space-between">'
-        +'<div style="font-size:14px;font-weight:700;font-family:var(--fmono);color:'+vc+'">'+vi+' '+vt+'</div>'
-        +'<div style="font-size:10px;color:var(--t3);font-family:var(--fmono)">'+vs+'</div>'
+      vw.innerHTML = '<div style="background:'+(iWin?'rgba(34,197,94,.1)':tie?'rgba(234,179,8,.1)':'rgba(239,68,68,.1)')+';border:2px solid '+vc+';border-radius:var(--r);padding:10px 14px;text-align:center">'
+        +'<div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:'+vc+';letter-spacing:1px">'+vi+' '+vt+'</div>'
+        +'<div style="font-size:10px;color:var(--t3);font-family:var(--fmono);margin-top:3px;letter-spacing:.5px">'+vs+'</div>'
         +'</div>';
     } else if (!isNaN(myTTK) && myTTK > 0) {
       vw.style.display = 'block';
@@ -4033,7 +4236,7 @@ function selectTarget(name) {
   var clr = document.getElementById('tgtSearchClear'); if (clr) clr.style.display = name ? 'block' : 'none';
   var dd = document.getElementById('tgtDropdown'); if (dd) dd.style.display = 'none';
   var nm = document.getElementById('tgtSelectedName'); if (nm) nm.textContent = name;
-  var sw = document.getElementById('tgtSelected'); if (sw) sw.style.display = 'flex';
+  // tgtSelected hidden
   updateTargetAnalysis(name);
 }
 
@@ -4175,7 +4378,9 @@ function deleteLoadout(id, e) {
 
 function renderSavedList() {
   var el = document.getElementById('svList'); if (!el) return;
+  var cnt = document.getElementById('svCount');
   var arr = getSavedLoadouts();
+  if (cnt) cnt.textContent = arr.length ? arr.length+' builds' : '';
   if (!arr.length) { el.innerHTML = '<div class="sv-empty">No saved loadouts yet</div>'; return; }
   el.innerHTML = arr.map(function(lo) {
     var isCurrent = lo.ship === selShip;
@@ -4509,7 +4714,7 @@ function renderDashboard() {
 
   // Role filter buttons
   var rfEl=document.getElementById('dRoleFilters');
-  if(rfEl && !rfEl.children.length){
+  if(rfEl && rfEl.children && !rfEl.children.length){
     var allRoles=['All'];
     Object.values(SHIP_DATA).forEach(function(s){
       if(s&&s.role){var r=s.role.split('/')[0].trim();if(allRoles.indexOf(r)<0)allRoles.push(r);}
@@ -4680,6 +4885,197 @@ function showToast(msg) {
   t.style.opacity = '1';
   clearTimeout(t._timer);
   t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 2000);
+}
+
+
+function toggleCompExpand(id) {
+  var el = document.getElementById(id);
+  var arr = document.getElementById(id + '_arr');
+  if (!el) return;
+  var open = el.style.display === 'none' || el.style.display === '';
+  el.style.display = open ? 'block' : 'none';
+  if (arr) arr.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+
+function toggleCompSlot(e, slotKey, baseKey, cnt) {
+  e.stopPropagation();
+  curCompEnabled[slotKey] = (curCompEnabled[slotKey] === false) ? true : false;
+  var enabled = curCompEnabled[slotKey] !== false;
+  var btn = e.target;
+  btn.textContent = enabled ? 'ON' : 'OFF';
+  btn.style.background = enabled ? 'var(--green)' : 'var(--border)';
+  btn.style.color = enabled ? '#fff' : 'var(--t3)';
+  var row = btn.closest('div[style*="margin-bottom:6px"]') || btn.parentNode.parentNode;
+  if (row) row.style.opacity = enabled ? '1' : '0.4';
+  var sel = document.querySelector('[data-compkey="'+slotKey+'"]');
+  if (sel) sel.disabled = !enabled;
+  // Update effective count for power calc
+  var def = SHIP_DATA[selShip]; if(!def) return;
+  var totalCnt = (def.comps&&def.comps.counts&&def.comps.counts[baseKey])||1;
+  var activeCnt = 0;
+  for(var i=0;i<totalCnt;i++){ if(curCompEnabled[baseKey+'_'+i]!==false) activeCnt++; }
+  // Store effective count
+  if(!curComps._effectiveCounts) curComps._effectiveCounts={};
+  curComps._effectiveCounts[baseKey] = activeCnt;
+  updatePower();
+  updateTargetAnalysis();
+}
+
+
+function toggleSlot(e, idx) {
+  e.stopPropagation();
+  var key = 'sl'+idx;
+  curSlotEnabled[key] = (curSlotEnabled[key] === false) ? true : false;
+  var on = curSlotEnabled[key] !== false;
+  var btn = e.target;
+  btn.textContent = on ? 'ON' : 'OFF';
+  btn.style.background = on ? 'var(--green)' : 'var(--bg4)';
+  btn.style.borderColor = on ? 'var(--green)' : 'var(--border)';
+  btn.style.color = on ? '#fff' : 'var(--t3)';
+  var row = document.getElementById('slotrow'+idx);
+  if (row) row.style.opacity = on ? '1' : '0.5';
+  var sel = document.querySelector('select[data-slotidx="'+idx+'"]');
+  if (sel) sel.disabled = !on;
+  updatePower();
+  updateTargetAnalysis();
+}
+
+function toggleMis(e, idx) {
+  e.stopPropagation();
+  var key = 'ms'+idx;
+  curMisEnabled[key] = (curMisEnabled[key] === false) ? true : false;
+  var on = curMisEnabled[key] !== false;
+  var btn = e.target;
+  btn.textContent = on ? 'ON' : 'OFF';
+  btn.style.background = on ? 'var(--green)' : 'var(--bg4)';
+  btn.style.borderColor = on ? 'var(--green)' : 'var(--border)';
+  btn.style.color = on ? '#fff' : 'var(--t3)';
+  var row = document.getElementById('misrow'+idx);
+  if (row) row.style.opacity = on ? '1' : '0.5';
+  var sel = document.querySelector('select[data-missidx="'+idx+'"]');
+  if (sel) sel.disabled = !on;
+  updatePower();
+  updateTargetAnalysis();
+}
+
+
+function onTurretGunChange(sel) {
+  var slotIdx = parseInt(sel.dataset.slotidx);
+  var gunIdx = parseInt(sel.dataset.gunidx);
+  var gKey = 'sl'+slotIdx+'_gun'+gunIdx;
+  curSlots[gKey] = sel.value;
+  // Update main slot to first gun for DPS calc compat
+  curSlots['sl'+slotIdx] = curSlots['sl'+slotIdx+'_gun0'] || sel.value;
+  var def = SHIP_DATA[selShip];
+  sel.classList.toggle('mod', sel.value !== (def&&def.slots[slotIdx]?def.slots[slotIdx].default:''));
+  var info = document.getElementById('tgi_'+slotIdx+'_'+gunIdx);
+  if(info) { var w=WEAPONS.find(function(x){return x.id===sel.value;}); info.innerHTML=wepInfo(sel.value); }
+  // Update summary
+  var tExpandId = 'texp'+slotIdx;
+  var lbl = document.getElementById(tExpandId+'_arr');
+  if(lbl && lbl.previousSibling) {
+    var sl = def && def.slots[slotIdx];
+    var cnt = sl ? (sl.count||1) : 1;
+    var parts=[];
+    for(var gi=0;gi<cnt;gi++){var v=curSlots['sl'+slotIdx+'_gun'+gi]||sl.default;parts.push((v||'—').split(' ')[0]);}
+    if(lbl.previousSibling) lbl.previousSibling.textContent = parts.join(' / ');
+  }
+  updatePower();
+  updateTargetAnalysis();
+}
+
+function linkAllTurretGuns(e, slotIdx, count) {
+  e.stopPropagation();
+  var firstSel = document.querySelector('select[data-slotidx="'+slotIdx+'"][data-gunidx="0"]');
+  if(!firstSel) return;
+  var val = firstSel.value;
+  for(var gi=0;gi<count;gi++) {
+    var sel = document.querySelector('select[data-slotidx="'+slotIdx+'"][data-gunidx="'+gi+'"]');
+    if(sel){sel.value=val;curSlots['sl'+slotIdx+'_gun'+gi]=val;}
+    var info = document.getElementById('tgi_'+slotIdx+'_'+gi);
+    if(info) info.innerHTML = wepInfo(val);
+  }
+  curSlots['sl'+slotIdx] = val;
+  var btn = e.target;
+  btn.textContent='LINKED ✓';btn.style.color='var(--green)';btn.style.borderColor='var(--green)';
+  setTimeout(function(){btn.textContent='LINK ALL';btn.style.color='var(--t3)';btn.style.borderColor='var(--border)';},1500);
+  updatePower();
+  updateTargetAnalysis();
+}
+
+
+function toggleTurretTree(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var open = el.style.display === 'none' || el.style.display === '';
+  el.style.display = open ? 'block' : 'none';
+  // Update arrow
+  var arrow = el.previousSibling && el.previousSibling.querySelector('span:first-child');
+  if (arrow) arrow.textContent = open ? '▲' : '▼';
+}
+
+
+function onMisItemChange(sel) {
+  var rackIdx = parseInt(sel.dataset.missidx);
+  var itemIdx = parseInt(sel.dataset.misgidx);
+  var iKey = 'ms'+rackIdx+'_'+itemIdx;
+  curMissiles[iKey] = sel.value;
+  curMissiles['ms'+rackIdx] = curMissiles['ms'+rackIdx+'_0'] || sel.value;
+  // Update summary
+  var def = SHIP_DATA[selShip];
+  var ms = def && def.missiles && def.missiles[rackIdx];
+  var cnt = ms ? (ms.count||1) : 1;
+  var treeId = 'mtree'+rackIdx;
+  var tree = document.getElementById(treeId);
+  if(tree && tree.previousSibling) {
+    var summaryEl = tree.previousSibling.querySelector('span:nth-child(2)');
+    if(summaryEl) {
+      var parts=[];
+      for(var mi=0;mi<cnt;mi++){var v=curMissiles['ms'+rackIdx+'_'+mi]||ms.default;var w=WEAPONS.find(function(x){return x.id===v;});parts.push(w?w.name.split(' ').slice(0,2).join(' '):'—');}
+      var allSame=parts.every(function(x){return x===parts[0];});
+      summaryEl.textContent=allSame?parts[0]+' ×'+cnt:parts.join(', ');
+    }
+  }
+  // Update info row
+  var info=document.getElementById('mi'+rackIdx);
+  if(info)info.innerHTML=misInfo(sel.value);
+  updatePower();
+  updateTargetAnalysis();
+}
+
+function linkAllMissiles(e, rackIdx, count) {
+  e.stopPropagation();
+  var firstSel = document.querySelector('select[data-missidx="'+rackIdx+'"][data-misgidx="0"]');
+  if(!firstSel) return;
+  var val = firstSel.value;
+  for(var mi=0;mi<count;mi++) {
+    var sel = document.querySelector('select[data-missidx="'+rackIdx+'"][data-misgidx="'+mi+'"]');
+    if(sel){sel.value=val;curMissiles['ms'+rackIdx+'_'+mi]=val;}
+  }
+  curMissiles['ms'+rackIdx] = val;
+  // Update summary
+  var treeId='mtree'+rackIdx;
+  var tree=document.getElementById(treeId);
+  if(tree&&tree.previousSibling){
+    var summaryEl=tree.previousSibling.querySelector('span:nth-child(2)');
+    if(summaryEl){var w=WEAPONS.find(function(x){return x.id===val;});summaryEl.textContent=(w?w.name.split(' ').slice(0,2).join(' '):'—')+' ×'+count;}
+  }
+  var btn=e.target;
+  btn.textContent='SYNCED ✓';btn.style.color='var(--green)';btn.style.borderColor='var(--green)';
+  setTimeout(function(){btn.textContent='SYNC';btn.style.color='var(--t3)';btn.style.borderColor='var(--border)';},1500);
+  var info=document.getElementById('mi'+rackIdx);
+  if(info)info.innerHTML=misInfo(val);
+  updatePower();
+  updateTargetAnalysis();
+}
+
+
+function onRackChange(sel) {
+  var idx = parseInt(sel.dataset.rackidx);
+  curRacks['ms'+idx] = sel.value;
+  // Could update missile count based on rack capacity in future
+  sel.classList.toggle('mod', !!sel.value);
 }
 
 </script>
