@@ -441,7 +441,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.48</span></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.49</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -469,7 +469,7 @@ option,optgroup{background:var(--bg2)}
   <div class="body">
 
     <!-- LEFT: ship dashboard -->
-                    <aside class="lp">
+                        <aside class="lp">
 <div class="ship-img-wrap" style="height:155px">
         <span class="ship-img-placeholder" id="shipPh">Select a ship</span>
         <img id="rpShipImg" alt=""/>
@@ -478,90 +478,47 @@ option,optgroup{background:var(--bg2)}
         </div>
         <span id="rpPatch"></span>
       </div>
-
       <div class="kpi-strip" id="kpiStrip" style="display:none">
-        <div class="kpi">
-          <div class="kpi-lbl">SCM</div>
-          <div class="kpi-val" id="kpiScm" style="color:var(--accent)">&#8212;<span class="kpi-unit"> m/s</span></div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-lbl">SHIELD</div>
-          <div class="kpi-val" id="kpiShield" style="color:var(--green)">&#8212;</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-lbl">TOTAL DPS</div>
-          <div class="kpi-val" id="kpiDps" style="color:var(--warn)">&#8212;</div>
-        </div>
+        <div class="kpi"><div class="kpi-lbl">SCM</div><div class="kpi-val" id="kpiScm">—<span class="kpi-unit">m/s</span></div></div>
+        <div class="kpi"><div class="kpi-lbl">SHIELD</div><div class="kpi-val" id="kpiShield">—<span class="kpi-unit">HP</span></div></div>
+        <div class="kpi"><div class="kpi-lbl">TOTAL DPS</div><div class="kpi-val" id="kpiDps">—<span class="kpi-unit">DPS</span></div></div>
       </div>
       <div class="lp-scroll">
-
-
         <div class="lp-card" id="pwrCard" style="display:none">
-          <div class="lp-card-hd">
-            <span class="lp-card-title">POWER</span>
-            <div class="pwr-eu">
-              <span class="pwr-eu-used" id="segUsed">&#8212;</span>
-              <span class="pwr-eu-sep">/</span>
-              <span class="pwr-eu-total" id="segTotal">&#8212;</span>
-              <span class="pwr-eu-unit"> EU</span>
-            </div>
-          </div>
-          <div class="con-row">
-            <span class="con-lbl">CONSUMPTION</span>
-            <div class="con-bar-wrap"><div id="conBar"></div></div>
-            <span id="pwrPct" style="font-size:10px;font-family:var(--fmono);min-width:32px;text-align:right;flex-shrink:0"></span>
-          </div>
+          <div class="lp-card-hd"><span class="lp-card-title">POWER</span><span id="segUsed" class="pwr-eu">—</span><span style="color:var(--t3);font-size:10px"> / </span><span id="segTotal" class="pwr-eu" style="color:var(--warn)">—</span><span style="color:var(--t3);font-size:9px"> EU</span></div>
+          <div class="con-row"><span class="con-lbl">CONSUMPTION</span><span id="pwrPct" style="font-size:10px;font-family:var(--fmono);color:var(--red)"></span></div>
+          <div class="con-bar-wrap"><div id="conBar"></div></div>
           <div class="spv-icons" id="spvIcons" style="display:none"></div>
           <div class="spv-chart" id="spvChart"></div>
           <div id="navModeBanner">&#9888; Weapons offline &middot; Shields collapsed</div>
-          <button class="spv-reset-btn" onclick="resetPwrAdj()">&#8635; RESET POWER</button>
           <div class="spv-modes">
-            <button class="spv-mode-btn on" id="mSCM" onclick="setMode('SCM')">SCM MODE</button>
+            <button class="spv-mode-btn" id="mSCM" onclick="setMode('SCM')">SCM MODE</button>
             <button class="spv-mode-btn" id="mNAV" onclick="setMode('NAV')">NAV MODE</button>
           </div>
-          <div class="speed-row">
-            <span class="speed-lbl">SPEED</span>
-            <span id="modeSpeed">&#8212;</span>
-          </div>
+          <div class="speed-row"><span class="sig-lbl">SPEED</span><span class="sig-val" id="modeSpeed">—</span></div>
+          <button class="reset-pwr" onclick="resetPower()">&#10227; RESET POWER</button>
         </div>
-
         <div class="lp-card" id="sigCard" style="display:none">
           <div class="lp-card-hd"><span class="lp-card-title">SIGNATURES</span></div>
           <div class="sig-row"><span class="sig-lbl">IR</span><span class="sig-val" id="sigIR" style="color:var(--warn)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">EM idle</span><span class="sig-val" id="sigEM" style="color:var(--accent)">&#8212;</span></div>
-          <div class="sig-row"><span class="sig-lbl">EM max</span><span class="sig-val" id="sigEMmax" style="color:var(--red)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">EM idle</span><span class="sig-val" id="sigEM" style="color:var(--cyan)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">EM max</span><span class="sig-val" id="sigEMmax" style="color:var(--cyan)">&#8212;</span></div>
         </div>
-
         <div class="dps-block" id="dpsCard" style="display:none">
-          <div class="dps-block-hd">FIREPOWER</div>
-          <div class="dps-nums">
-            <div class="dps-cell">
-              <div class="dps-lbl">TOTAL DPS</div>
-              <div class="dps-val" id="totalDPS" style="color:var(--warn)">&#8212;</div>
-            </div>
-            <div class="dps-cell">
-              <div class="dps-lbl">ALPHA</div>
-              <div class="dps-val" id="totalAlpha" style="color:var(--red)">&#8212;</div>
-            </div>
+          <div class="lp-card-hd"><span class="lp-card-title">FIREPOWER</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+            <div><div style="font-size:9px;color:var(--t3);font-family:var(--fmono);letter-spacing:1px">TOTAL DPS</div><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--warn)" id="totalDPS">—</div></div>
+            <div><div style="font-size:9px;color:var(--t3);font-family:var(--fmono);letter-spacing:1px">ALPHA</div><div style="font-size:20px;font-weight:700;font-family:var(--fmono);color:var(--red)" id="totalAlpha">—</div></div>
           </div>
-          <div id="dpsBarsWrap" style="display:none">
-            <div class="dps-bar-hd">BY WEAPON</div>
-            <div id="dpsBars"></div>
-          </div>
+          <div id="dpsBarsWrap" style="display:none"><div style="font-size:9px;color:var(--t3);font-family:var(--fmono);letter-spacing:1px;margin-bottom:4px">BY WEAPON</div><div id="dpsBars"></div></div>
           <div id="shieldSection" style="display:none">
             <div class="sig-row"><span class="sig-lbl">Shield HP</span><span class="sig-val" id="shpTotal" style="color:var(--green)">&#8212;</span></div>
             <div class="sig-row"><span class="sig-lbl">Regen/s</span><span class="sig-val" id="shpRegen" style="color:var(--cyan)">&#8212;</span></div>
             <div class="sig-row"><span class="sig-lbl">Face HP</span><span class="sig-val" id="shpFace">&#8212;</span></div>
           </div>
-          <div id="maxRange" style="display:none">
-            <div class="sig-row"><span class="sig-lbl">QD Range</span><span class="sig-val" id="qdRange" style="color:var(--accent)">&#8212;</span></div>
-            <div class="sig-row"><span class="sig-lbl">Spool</span><span class="sig-val" id="qdSpool">&#8212;</span></div>
-          </div>
+          <div class="sig-row"><span class="sig-lbl">QD Range</span><span class="sig-val" id="qdRange">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Spool</span><span class="sig-val" id="qdSpool">&#8212;</span></div>
         </div>
-
-      </div>
-
-      
         <div class="lp-card" id="liveStatsCard" style="display:none">
           <div class="lp-card-hd"><span class="lp-card-title">FLIGHT</span></div>
           <div class="sig-row"><span class="sig-lbl">AB Speed</span><span class="sig-val" id="statAB" style="color:var(--cyan)">&#8212;</span></div>
@@ -588,19 +545,11 @@ option,optgroup{background:var(--bg2)}
           <div class="sig-row"><span class="sig-lbl">QT Fuel</span><span class="sig-val" id="statQT" style="color:var(--purple)">&#8212;</span></div>
         </div>
       </div>
-
       <div class="lp-foot" style="display:none">
         <button id="genBtn" onclick="generate()" disabled>
           <span>⬡</span><span id="gLbl">GENERATE LOADOUT</span>
         </button>
       </div>
-      <!-- Saved loadouts in left panel -->
-
-
-    </aside
-      </div>
-    
-    
     </aside>
 
 
