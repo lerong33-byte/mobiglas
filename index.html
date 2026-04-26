@@ -441,7 +441,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.46</span></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.48</span></div>
     <div class="nav-search-wrap">
       <span class="nav-search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships&hellip;" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -563,21 +563,30 @@ option,optgroup{background:var(--bg2)}
 
       
         <div class="lp-card" id="liveStatsCard" style="display:none">
-          <div class="lp-card-hd">
-            <span class="lp-card-title">FLIGHT</span>
-          </div>
+          <div class="lp-card-hd"><span class="lp-card-title">FLIGHT</span></div>
+          <div class="sig-row"><span class="sig-lbl">AB Speed</span><span class="sig-val" id="statAB" style="color:var(--cyan)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Pitch</span><span class="sig-val" id="statPitch" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Roll</span><span class="sig-val" id="statRoll" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Yaw</span><span class="sig-val" id="statYaw" style="color:var(--t2)">&#8212;</span></div>
+        </div>
         <div class="lp-card" id="vesselStatsCard" style="display:none">
-          <div class="lp-card-hd">
-            <span class="lp-card-title">VESSEL</span>
-          </div>
+          <div class="lp-card-hd"><span class="lp-card-title">VESSEL</span></div>
+          <div class="sig-row"><span class="sig-lbl">Focus</span><span class="sig-val" id="statFocus" style="color:var(--accent)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Crew</span><span class="sig-val" id="statCrew" style="color:var(--text)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Cargo</span><span class="sig-val" id="statCargo" style="color:var(--warn)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Mass</span><span class="sig-val" id="statMass" style="color:var(--t2)">&#8212;</span></div>
+        </div>
         <div class="lp-card" id="dimensionsCard" style="display:none">
-          <div class="lp-card-hd">
-            <span class="lp-card-title">DIMENSIONS</span>
-          </div>
+          <div class="lp-card-hd"><span class="lp-card-title">DIMENSIONS</span></div>
+          <div class="sig-row"><span class="sig-lbl">Length</span><span class="sig-val" id="statLen" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Beam</span><span class="sig-val" id="statBeam" style="color:var(--t2)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">Height</span><span class="sig-val" id="statHeight" style="color:var(--t2)">&#8212;</span></div>
+        </div>
         <div class="lp-card" id="fuelCard" style="display:none">
-          <div class="lp-card-hd">
-            <span class="lp-card-title">FUEL</span>
-          </div>
+          <div class="lp-card-hd"><span class="lp-card-title">FUEL</span></div>
+          <div class="sig-row"><span class="sig-lbl">H&#8322; Fuel</span><span class="sig-val" id="statH2" style="color:var(--cyan)">&#8212;</span></div>
+          <div class="sig-row"><span class="sig-lbl">QT Fuel</span><span class="sig-val" id="statQT" style="color:var(--purple)">&#8212;</span></div>
+        </div>
       </div>
 
       <div class="lp-foot" style="display:none">
