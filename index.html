@@ -4122,6 +4122,30 @@ function quickSave() {
   saveLoadout();
 }
 
+
+// ── Target image guardian ──
+(function() {
+  var guardian = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.type === 'attributes' && m.attributeName === 'style') {
+        var el = m.target;
+        if (_currentTarget && el.style.display === 'none') {
+          // Something hid the wrap while a target is selected - restore it
+          setTimeout(function() {
+            if (_currentTarget) loadTargetImage(_currentTarget);
+          }, 0);
+        }
+      }
+    });
+  });
+  window.addEventListener('load', function() {
+    var wrap = document.getElementById('tgtImgWrap');
+    if (wrap) {
+      guardian.observe(wrap, { attributes: true, attributeFilter: ['style'] });
+    }
+  });
+})();
+
 </script>
 
 
