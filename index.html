@@ -480,7 +480,7 @@ option,optgroup{background:var(--bg2)}
 <div id="app">
 
   <nav class="nav">
-    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--t3);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.55</span></div>
+    <div class="nav-logo" onclick="_liveSync && _liveSync.forceSync()" title="Click to force sync live data" style="cursor:pointer">MOBIGLAS <span style="font-size:9px;color:var(--green);font-family:var(--fmono);font-weight:400;letter-spacing:1px">v2.56</span></div>
     <div class="nav-search-wrap search-box">
       <span class="search-icon">&#9906;</span>
       <input type="text" id="sSearch" placeholder="Search ships…" oninput="onSearch()" onfocus="buildSrbox(this.value.trim().toLowerCase())" onblur="setTimeout(function(){var sb=document.getElementById('srbox');if(sb)sb.style.display='none';},150)" autocomplete="off"/>
@@ -1819,7 +1819,7 @@ var _liveSync = {
     var el = document.getElementById('syncStatus');
     if (el) {
       el.textContent = msg;
-      el.style.color = msg.includes('ERROR') ? 'var(--red)' : msg.includes('NEW') || msg.includes('CHANGED') ? 'var(--green)' : 'var(--t3)';
+      el.style.color = msg.includes('ERROR') ? 'var(--red)' : msg.includes('fail') ? 'var(--warn)' : 'var(--green)';
     }
   },
 
